@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>rooms</h1>
+	
+	<a href="#" th:href="@{/room/new}">new room</a>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th colspan="2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="room : ${rooms}">
+				<td>
+					<a href="#" th:href="@{/room/{id}(id=${room.id})}" th:text="${room.name}">XX体育館</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/room/{id}/edit(id=${room.id})}">Edit</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/room/{id}(id=${room.id})}" data-method="delete">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<body>
+<div th:fragment="content">
+<p>
+ID: [[${cell.id}]]<br>
+Room ID: [[${cell.roomId}]]<br>
+Begin Time: [[${cell.beginTime}]]<br>
+End Time: [[${cell.endTime}]]<br>
+Max Number Of People: [[${cell.maxNumberOfPeople}]]<br>
+</p>
+
+<a th:href="@{/cell/}">Back</a>
+</div>
+</body>
+</html>

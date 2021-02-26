@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>menu</h1>
+	
+	<ul>
+		<li><a href="#" th:href="@{/room/}">room</a></li>
+		<li><a href="#" th:href="@{/cell/}">cell</a></li>
+		<li><a href="#" th:href="@{/vaccine/}">vaccine</a></li>
+	</ul>
+</div>
+</body>
+</html>

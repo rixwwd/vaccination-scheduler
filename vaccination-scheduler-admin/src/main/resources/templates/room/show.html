@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<body>
+<div th:fragment="content">
+<p>
+ID: [[${room.id}]]<br>
+Name: [[${room.name}]]<br>
+</p>
+
+<a th:href="@{/room/}">Back</a>
+</div>
+</body>
+</html>

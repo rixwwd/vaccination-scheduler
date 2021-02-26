@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>cells</h1>
+	
+	<a href="#" th:href="@{/cell/new}">new cell</a>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Room Id</th>
+				<th>Begin Time</th>
+				<th>End Time</th>
+				<th>Max Number Of People</th>
+				<th colspan="2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="cell : ${cells}">
+				<td>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.roomId}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.beginTime}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.endTime}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.maxNumberOfPeople}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/cell/{id}/edit(id=${cell.id})}">Edit</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" data-method="delete">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>

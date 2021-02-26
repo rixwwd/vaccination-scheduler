@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<body>
+<div th:fragment="content">
+<h1>new vaccine</h1>
+
+<form th:action="@{/vaccine/}" th:object="${vaccine}" method="post">
+
+	<label for="expectedDeliveryDate">Expected Delivery Date</label>
+	<input type="text" th:field="*{expectedDeliveryDate}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('expectedDeliveryDate')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="quantity">Quantity</label>
+	<input type="text" th:field="*{quantity}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('quantity')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="roomId">Room Id</label>
+	<input type="text" th:field="*{roomId}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('roomId')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<input type="submit" />
+</form>
+
+<a th:href="@{/vaccine/}">Back</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<body>
+<div th:fragment="content">
+<h1>new cells</h1>
+
+<form th:action="@{/cell/}" th:object="${cell}" method="post">
+
+	<label for="roomId">Room Id</label>
+	<input type="text" th:field="*{roomId}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('roomId')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="beginTime">Begin Time</label>
+	<input type="text" th:field="*{beginTime}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('beginTime')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="endTime">End Time</label>
+	<input type="text" th:field="*{endTime}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('endTime')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="maxNumberOfPeople">Max Number Of People</label>
+	<input type="text" th:field="*{maxNumberOfPeople}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('maxNumberOfPeople')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<input type="submit" />
+</form>
+
+<a th:href="@{/cell/}">Back</a>
+</div>
+</body>
+</html>

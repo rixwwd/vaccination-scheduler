@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, links, content)">
+<head>
+  <title>COVID-19 Vaccination Scheduler</title>
+  <th:block th:replace="${links}" />
+</head>
+<body>
+
+<div th:if="${#authorization.expression('isAuthenticated()')}">
+<form method="post" action="#" th:action="@{/signOut}"><input type="submit" value="Sign Out"></form>
+<br>
+<a th:href="@{/menu/}">Back to menu</a>
+</div>
+
+<div th:replace="${content}"></div>
+</body>
+</html>

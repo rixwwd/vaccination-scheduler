@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>vaccines</h1>
+	
+	<a href="#" th:href="@{/vaccine/new}">new vaccine</a>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Expected Delivery Date</th>
+				<th>Quantity</th>
+				<th>Room Id</th>
+				<th colspan="2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="vaccine : ${vaccines}">
+				<td>
+					<a href="#" th:href="@{/vaccine/{id}(id=${vaccine.id})}" th:text="${vaccine.expectedDeliveryDate}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/vaccine/{id}(id=${vaccine.id})}" th:text="${vaccine.quantity}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/vaccine/{id}(id=${vaccine.id})}" th:text="${vaccine.roomId}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/vaccine/{id}/edit(id=${vaccine.id})}">Edit</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/vaccine/{id}(id=${vaccine.id})}" data-method="delete">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
