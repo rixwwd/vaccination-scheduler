@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>menu</h1>
+	
+	<ul>
+		<li><a href="#" th:href="@{/reservation/new}">予約する</a></li>
+		<li><a href="#">連絡先の登録</a></li>
+	</ul>
+	
+	<div th:if="${reservation != null}">
+		予約情報
+		<table>
+			<tr><th>場所</th><td th:text="${reservedRoom.name}"></td></tr>
+			<tr><th>時間</th><td th:text="${reservedCell.beginTime} + '-' + ${reservedCell.endTime}">2021/04/01 10:00-11:00</td></tr>
+		</table>
+		<a href="#">キャンセルする</a>	
+	</div>
+</div>
+</body>
+</html>

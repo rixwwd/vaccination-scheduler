@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+<h1>complete reservation</h1>
+
+<table>
+<tbody>
+<tr><th>Coupon</th><td th:text="${reservation.coupon}">12345</td></tr>
+<tr><th>Cell</th><td th:text="${reservation.cellId}">会議室</td></tr>
+<tr><th>Reservation Number</th><td th:text="${reservation.reservationNumber}">98765</td></tr>
+</tbody>
+</table>
+
+
+<a th:href="@{/}">To TOP PAGE</a>
+</div>
+</body>
+</html>

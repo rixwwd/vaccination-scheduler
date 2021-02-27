@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+<h1>new reservation</h1>
+
+<form th:action="@{/reservation/confirm}" th:object="${reservation}" method="post">
+
+	<label for="coupon">Coupon</label>
+	<input type="text" th:field="*{coupon}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="cell">Cell</label>
+	<input type="text" th:field="*{cellId}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('cellId')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+
+	<input type="submit" />
+</form>
+
+<a th:href="@{/}">Cencel</a>
+</div>
+</body>
+</html>

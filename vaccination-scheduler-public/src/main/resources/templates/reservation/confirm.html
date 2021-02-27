@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+<h1>confirm reservation</h1>
+
+<table>
+<tbody>
+<tr><th>Coupon</th><td th:text="${reservation.coupon}">12345</td></tr>
+<tr><th>Cell</th><td th:text="${reservation.cellId}">会議室</td></tr>
+</tbody>
+</table>
+
+<form th:action="@{/reservation/}" th:object="${reservation}" method="post">
+<input type="hidden" th:field="*{coupon}">
+<input type="hidden" th:field="*{cellId}">
+<input type="submit">
+</form>
+
+<a th:href="@{/}">Cencel</a>
+</div>
+</body>
+</html>
