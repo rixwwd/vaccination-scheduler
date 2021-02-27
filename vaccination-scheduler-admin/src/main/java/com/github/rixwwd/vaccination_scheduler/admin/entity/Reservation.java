@@ -13,18 +13,24 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("RESERVATIONS")
 public class Reservation {
+
 	@Id
 	private UUID id;
 
 	@NotNull
 	private UUID cellId;
 
-	@NotNull
-	private UUID personId;
+	private UUID publicUserId;
 
 	@NotBlank
 	@Size(max = 255)
-	private String reservatonNumber;
+	private String coupon;
+
+	@NotBlank
+	@Size(max = 255)
+	private String name;
+
+	private String reservationNumber;
 
 	@CreatedDate
 	private LocalDateTime createdAt;
@@ -45,20 +51,36 @@ public class Reservation {
 		this.cellId = cellId;
 	}
 
-	public UUID getPersonId() {
-		return personId;
+	public UUID getPublicUserId() {
+		return publicUserId;
 	}
 
-	public void setPersonId(UUID personId) {
-		this.personId = personId;
+	public void setPublicUserId(UUID publicUserId) {
+		this.publicUserId = publicUserId;
 	}
 
-	public String getReservatonNumber() {
-		return reservatonNumber;
+	public String getCoupon() {
+		return coupon;
 	}
 
-	public void setReservatonNumber(String reservatonNumber) {
-		this.reservatonNumber = reservatonNumber;
+	public void setCoupon(String coupon) {
+		this.coupon = coupon;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getReservationNumber() {
+		return reservationNumber;
+	}
+
+	public void setReservationNumber(String reservationNumber) {
+		this.reservationNumber = reservationNumber;
 	}
 
 	public LocalDateTime getCreatedAt() {

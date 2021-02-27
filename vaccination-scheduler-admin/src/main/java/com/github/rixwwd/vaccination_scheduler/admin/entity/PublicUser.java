@@ -21,7 +21,11 @@ public class PublicUser {
 
 	@NotBlank
 	@Size(max = 255)
-	private String loginname;
+	private String loginName;
+
+	@NotBlank
+	@Size(max = 255)
+	private String password;
 
 	@NotBlank
 	@Size(max = 255)
@@ -63,12 +67,20 @@ public class PublicUser {
 		this.id = id;
 	}
 
-	public String getLoginname() {
-		return loginname;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setLoginname(String loginname) {
-		this.loginname = loginname;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getCoupon() {
