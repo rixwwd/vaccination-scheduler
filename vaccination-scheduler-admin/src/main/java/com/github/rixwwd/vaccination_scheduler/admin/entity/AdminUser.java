@@ -5,19 +5,27 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table("ADMIN_USERS")
+@Entity
+@Table(name = "ADMIN_USERS")
+@EntityListeners(AuditingEntityListener.class)
 public class AdminUser implements UserDetails {
 
 	/**
@@ -26,24 +34,33 @@ public class AdminUser implements UserDetails {
 	private static final long serialVersionUID = -2335961635167529588L;
 
 	@Id
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	@Column(name = "ID")
 	private UUID id;
 
 	@NotBlank
 	@Pattern(regexp = "[a-z0-9_]{4, 255}")
+	@Column(name = "USERNAME")
 	private String username;
 
+	@Column(name = "PASSWORD")
 	private String password;
 
+	@Column(name = "ENABLED")
 	private boolean enabled;
 
 	@Size(max = 255)
 	@NotBlank
+	@Column(name = "NAME")
 	private String name;
 
 	@CreatedDate
+	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
+	@Column(name = "UPDATED_AT")
 	private LocalDateTime updatedAt;
 
 	public UUID getId() {

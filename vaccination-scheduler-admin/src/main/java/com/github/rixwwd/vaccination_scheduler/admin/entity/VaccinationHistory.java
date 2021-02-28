@@ -4,20 +4,41 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Table("VACCINATION_HISTORIES")
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@Entity
+@Table(name = "VACCINATION_HISTORIES")
+@EntityListeners(AuditingEntityListener.class)
 public class VaccinationHistory {
+
 	@Id
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
 	private UUID id;
 
-	private UUID userId;
+	@Column(name = "PUBLIC_USER_ID")
+	private UUID publicUserId;
 
+	@ManyToOne
+	@JoinColumn(name = "PUBLIC_USER_ID", insertable = false, updatable = false)
+	private PublicUser publicUser;
+
+	@Column(name = "VACCINATED_AT")
 	private LocalDate vaccinatedAt;
 
 	@CreatedDate
+	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
 
 	public UUID getId() {
@@ -28,12 +49,20 @@ public class VaccinationHistory {
 		this.id = id;
 	}
 
-	public UUID getUserId() {
-		return userId;
+	public UUID getPublicUserId() {
+		return publicUserId;
 	}
 
-	public void setUserId(UUID userId) {
-		this.userId = userId;
+	public void setPublicUserId(UUID publicUserId) {
+		this.publicUserId = publicUserId;
+	}
+
+	public PublicUser getPublicUser() {
+		return publicUser;
+	}
+
+	public void setPublicUser(PublicUser publicUser) {
+		this.publicUser = publicUser;
 	}
 
 	public LocalDate getVaccinatedAt() {

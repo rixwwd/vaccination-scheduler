@@ -4,59 +4,82 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
-@Table("PUBLIC_USERS")
+@Entity
+@Table(name = "PUBLIC_USERS")
+@EntityListeners(AuditingEntityListener.class)
 public class PublicUser {
 
 	@Id
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	@Column(name = "ID")
 	private UUID id;
 
 	@NotBlank
 	@Size(max = 255)
+	@Column(name = "LOGIN_NAME")
 	private String loginName;
 
 	@NotBlank
 	@Size(max = 255)
+	@Column(name = "PASSWORD")
 	private String password;
 
 	@NotBlank
 	@Size(max = 255)
+	@Column(name = "COUPON")
 	private String coupon;
 
 	@NotBlank
 	@Size(max = 255)
+	@Column(name = "NAME")
 	private String name;
 
 	@Size(max = 255)
+	@Column(name = "HURIGANA")
 	private String hurigana;
 
 	@DateTimeFormat(pattern = "uuuu-MM-dd")
+	@Column(name = "BIRTHDAY")
 	private LocalDate birthday;
 
 	@Size(max = 255)
+	@Column(name = "ADDRESS")
 	private String address;
 
 	@Size(max = 255)
+	@Column(name = "TELEPHONE_NUMBER")
 	private String telephoneNumber;
 
 	@Size(max = 255)
+	@Column(name = "EMAIL")
 	private String email;
 
 	@Size(max = 255)
+	@Column(name = "SMS")
 	private String sms;
 
 	@CreatedDate
+	@Column
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
+	@Column
 	private LocalDateTime updatedAt;
 
 	public UUID getId() {
@@ -162,4 +185,5 @@ public class PublicUser {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
 }
