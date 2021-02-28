@@ -55,3 +55,24 @@ create table reservations (
   foreign key (cell_id) references cells (id),
   foreign key (public_user_id) references public_users (id)
 );
+
+
+create table vaccines(
+  id uuid primary key,
+  expected_delivery_date date,
+  quantity integer not null,
+  room_id uuid not null,
+  
+  created_at timestamp not null,
+  updated_at timestamp not null
+);
+
+
+create table vaccination_histories (
+  id uuid primary key,
+  public_user_id uuid not null,
+  vaccinated_at date not null,
+  
+  created_at timestamp not null
+);
+

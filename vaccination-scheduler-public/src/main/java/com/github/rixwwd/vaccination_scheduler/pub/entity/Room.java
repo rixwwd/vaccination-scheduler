@@ -3,28 +3,35 @@ package com.github.rixwwd.vaccination_scheduler.pub.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
+import javax.persistence.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table("ROOMS")
+@Entity
+@Table(name = "ROOMS")
 public class Room {
 
 	@Id
+	@Column(name = "ID")
 	private UUID id;
 
 	@Size(max = 255)
 	@NotEmpty
+	@Column(name = "NAME")
 	private String name;
 
 	@CreatedDate
+	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
+	@Column(name = "UPDATED_AT")
 	private LocalDateTime updatedAt;
 
 	public UUID getId() {

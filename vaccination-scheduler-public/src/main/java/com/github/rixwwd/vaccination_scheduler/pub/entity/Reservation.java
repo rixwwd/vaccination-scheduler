@@ -3,32 +3,60 @@ package com.github.rixwwd.vaccination_scheduler.pub.entity;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Table("RESERVATIONS")
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+
+@Entity
+@Table(name = "RESERVATIONS")
+@EntityListeners(AuditingEntityListener.class)
 public class Reservation {
 
 	@Id
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GeneratedValue(generator = "uuid")
+	@Column(name = "ID")
 	private UUID id;
 
 	@NotNull
+	@Column(name = "CELL_ID")
 	private UUID cellId;
 
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "CELL_ID", insertable = false, updatable = false)
+	private Cell cell;
+
+	@Column(name = "PUBLIC_USER_ID")
 	private UUID publicUserId;
+
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "PUBLIC_USER_ID", insertable = false, updatable = false)
+	private PublicUser publicUser;
 
 	@NotBlank
 	@Size(max = 255)
+	@Column(name = "COUPON")
 	private String coupon;
 
+	@Column(name = "RESERVATION_NUMBER")
 	private String reservationNumber;
 
 	@CreatedDate
+	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
 
 	public UUID getId() {
@@ -47,12 +75,28 @@ public class Reservation {
 		this.cellId = cellId;
 	}
 
+	public Cell getCell() {
+		return cell;
+	}
+
+	public void setCell(Cell cell) {
+		this.cell = cell;
+	}
+
 	public UUID getPublicUserId() {
 		return publicUserId;
 	}
 
 	public void setPublicUserId(UUID publicUserId) {
 		this.publicUserId = publicUserId;
+	}
+
+	public PublicUser getPublicUser() {
+		return publicUser;
+	}
+
+	public void setPublicUser(PublicUser publicUser) {
+		this.publicUser = publicUser;
 	}
 
 	public String getCoupon() {

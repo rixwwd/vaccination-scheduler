@@ -17,8 +17,8 @@
 	<div th:if="${reservation != null}">
 		予約情報
 		<table>
-			<tr><th>場所</th><td th:text="${reservedRoom.name}"></td></tr>
-			<tr><th>時間</th><td th:text="${reservedCell.beginTime} + '-' + ${reservedCell.endTime}">2021/04/01 10:00-11:00</td></tr>
+			<tr><th>場所</th><td th:text="${reservation.cell.room.name}"></td></tr>
+			<tr><th>時間</th><td th:text="${reservation.cell.beginTime} + '-' + ${reservation.cell.endTime}">2021/04/01 10:00-11:00</td></tr>
 		</table>
 		<a href="#">キャンセルする</a>	
 	</div>
