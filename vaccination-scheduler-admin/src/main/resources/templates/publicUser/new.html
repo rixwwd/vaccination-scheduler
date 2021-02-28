@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="content">
+<h1>new public users</h1>
+
+<form th:action="@{/publicUser/}" th:object="${publicUser}" method="post">
+
+	<label for="loginName">Login Name</label>
+	<input type="text" th:field="*{loginName}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('loginName')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="plainPassword">Password</label>
+	<input type="password" th:field="*{plainPassword}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('plainPassword')}" th:text="${err}" />
+	</ul>
+	<br>
+
+	<label for="plainPasswordConfirmation">Password Confirmation</label>
+	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('plainPasswordConfirmation')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="coupon">Coupon</label>
+	<input type="text" th:field="*{coupon}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="name">Name</label>
+	<input type="text" th:field="*{name}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('name')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="hurigana">Hurigana</label>
+	<input type="text" th:field="*{hurigana}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('hurigana')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="birthday">Birthday</label>
+	<input type="text" th:field="*{birthday}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('birthday')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="address">Address</label>
+	<input type="text" th:field="*{address}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('address')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="telephoneNumber">Telephone Number</label>
+	<input type="text" th:field="*{telephoneNumber}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('telephoneNumber')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="email">Email</label>
+	<input type="text" th:field="*{email}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<label for="sms">SMS</label>
+	<input type="text" th:field="*{sms}" th:errorclass="field-error" />
+	<ul>
+		<li th:each="err : ${#fields.errors('sms')}" th:text="${err}" />
+	</ul>
+	<br>
+	
+	<input type="submit" />
+</form>
+
+<a th:href="@{/publicUser/}">Back</a>
+</div>
+</body>
+</html>

@@ -8,12 +8,13 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.CreatedDate;
-import javax.persistence.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,6 +43,16 @@ public class PublicUser implements UserDetails {
 	@Size(max = 255)
 	@Column(name = "PASSWORD")
 	private String password;
+
+	@NotBlank(groups = Create.class)
+	@Size(max = 255, groups = { Create.class, UpdatePassword.class })
+	@Transient
+	private String plainPassword;
+
+	@NotBlank(groups = Create.class)
+	@Size(max = 255, groups = { Create.class, UpdatePassword.class })
+	@Transient
+	private String plainPasswordConfirmation;
 
 	@NotBlank
 	@Size(max = 255)
@@ -107,6 +118,22 @@ public class PublicUser implements UserDetails {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPlainPassword() {
+		return plainPassword;
+	}
+
+	public void setPlainPassword(String plainPassword) {
+		this.plainPassword = plainPassword;
+	}
+
+	public String getPlainPasswordConfirmation() {
+		return plainPasswordConfirmation;
+	}
+
+	public void setPlainPasswordConfirmation(String plainPasswordConfirmation) {
+		this.plainPasswordConfirmation = plainPasswordConfirmation;
 	}
 
 	public String getCoupon() {
@@ -217,5 +244,11 @@ public class PublicUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public static interface Create {
+	}
+
+	public static interface UpdatePassword {
 	}
 }

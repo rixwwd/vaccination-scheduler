@@ -10,6 +10,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -35,10 +36,18 @@ public class PublicUser {
 	@Column(name = "LOGIN_NAME")
 	private String loginName;
 
-	@NotBlank
-	@Size(max = 255)
 	@Column(name = "PASSWORD")
 	private String password;
+
+	@NotBlank(groups = Create.class)
+	@Size(max = 255, groups = { Create.class, UpdatePassword.class })
+	@Transient
+	private String plainPassword;
+
+	@NotBlank(groups = Create.class)
+	@Size(max = 255, groups = { Create.class, UpdatePassword.class })
+	@Transient
+	private String plainPasswordConfirmation;
 
 	@NotBlank
 	@Size(max = 255)
@@ -104,6 +113,22 @@ public class PublicUser {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPlainPassword() {
+		return plainPassword;
+	}
+
+	public void setPlainPassword(String plainPassword) {
+		this.plainPassword = plainPassword;
+	}
+
+	public String getPlainPasswordConfirmation() {
+		return plainPasswordConfirmation;
+	}
+
+	public void setPlainPasswordConfirmation(String plainPasswordConfirmation) {
+		this.plainPasswordConfirmation = plainPasswordConfirmation;
 	}
 
 	public String getCoupon() {
@@ -186,4 +211,9 @@ public class PublicUser {
 		this.updatedAt = updatedAt;
 	}
 
+	public static interface Create {
+	}
+
+	public static interface UpdatePassword {
+	}
 }

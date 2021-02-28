@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="content">
+<p>
+ID: [[${publicUser.id}]]<br>
+Login Name: [[${publicUser.loginName}]]<br>
+Coupon: [[${publicUser.coupon}]]<br>
+Name: [[${publicUser.name}]]<br>
+Hurigana: [[${publicUser.hurigana}]]<br>
+Birthday: [[${publicUser.birthday}]]<br>
+Address: [[${publicUser.address}]]<br>
+Telephone Number: [[${publicUser.telephoneNumber}]]<br>
+Email: [[${publicUser.email}]]<br>
+SMS: [[${publicUser.sms}]]<br>
+</p>
+
+<a th:href="@{/publicUser/}">Back</a>
+</div>
+</body>
+</html>

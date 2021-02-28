@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+<title>A</title>
+</head>
+<body>
+<div th:fragment="content">
+	<h1>public users</h1>
+	
+	<a href="#" th:href="@{/publicUser/new}">new public user</a>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>Login Name</th>
+				<th>Coupon</th>
+				<th>Name</th>
+				<th>Hurigana</th>
+				<th>Birthday</th>
+				<th>Address</th>
+				<th>Telephone Number</th>
+				<th>Email</th>
+				<th>SMS</th>
+				<th colspan="2"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="publicUser : ${publicUsers}">
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.loginName}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.coupon}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.name}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.hurigana}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.birthday}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.address}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.telephoneNumber}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.email}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.sms}">1</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}/edit(id=${publicUser.id})}">Edit</a>
+				</td>
+				<td>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" data-method="delete">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
