@@ -48,7 +48,7 @@ public class ReservationService {
 		// ワクチンと時間枠の確保
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
 		var vaccineStocks = vaccineStockRepository
-				.getByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(cell.getRoomId(), LocalDate.now());
+				.findByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(cell.getRoomId(), LocalDate.now());
 
 		// ワクチン在庫確認
 		if (vaccineStocks.isEmpty()) {

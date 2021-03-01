@@ -22,7 +22,7 @@ public interface VaccineStockRepository extends JpaRepository<VaccineStock, UUID
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	@Query("SELECT v FROM VaccineStock v WHERE room_id = :roomId AND expected_delivery_date >= :date")
-	List<VaccineStock> getByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(@Param("roomId") UUID roomId,
+	List<VaccineStock> findByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(@Param("roomId") UUID roomId,
 			@Param("date") LocalDate date);
 
 }
