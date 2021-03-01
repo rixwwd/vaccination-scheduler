@@ -8,5 +8,7 @@ create table reservations (
   created_at timestamp not null,
   
   foreign key (cell_id) references cells (id),
-  foreign key (public_user_id) references public_users (id)
+  foreign key (public_user_id) references public_users (id),
+  
+  unique (public_user_id, coupon)
 );
