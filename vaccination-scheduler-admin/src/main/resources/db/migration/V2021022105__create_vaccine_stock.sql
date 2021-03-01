@@ -1,4 +1,4 @@
-create table vaccines(
+create table vaccine_stocks(
   id uuid primary key,
   expected_delivery_date date,
   quantity integer not null,

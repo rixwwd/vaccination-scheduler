@@ -22,9 +22,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "VACCINES")
+@Table(name = "VACCINE_STOCKS")
 @EntityListeners(AuditingEntityListener.class)
-public class Vaccine {
+public class VaccineStock {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")

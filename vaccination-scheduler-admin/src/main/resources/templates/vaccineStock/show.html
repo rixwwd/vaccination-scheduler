@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<body>
+<div th:fragment="content">
+<p>
+ID: [[${vaccineStock.id}]]<br>
+Expected Delivery Date: [[${vaccineStock.expectedDeliveryDate}]]<br>
+Quantity: [[${vaccineStock.quantity}]]<br>
+Room ID: [[${vaccineStock.roomId}]]<br>
+</p>
+
+<a th:href="@{/vaccineStock/}">Back</a>
+</div>
+</body>
+</html>

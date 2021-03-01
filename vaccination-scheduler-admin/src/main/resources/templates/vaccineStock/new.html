@@ -5,7 +5,7 @@
 <div th:fragment="content">
 <h1>new vaccine</h1>
 
-<form th:action="@{/vaccine/}" th:object="${vaccine}" method="post">
+<form th:action="@{/vaccineStock/}" th:object="${vaccineStock}" method="post">
 
 	<label for="expectedDeliveryDate">Expected Delivery Date</label>
 	<input type="text" th:field="*{expectedDeliveryDate}" th:errorclass="field-error" />
@@ -31,7 +31,7 @@
 	<input type="submit" />
 </form>
 
-<a th:href="@{/vaccine/}">Back</a>
+<a th:href="@{vaccineStock}">Back</a>
 </div>
 </body>
 </html>
