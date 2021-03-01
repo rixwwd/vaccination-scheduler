@@ -29,13 +29,13 @@ public class ReservationService {
 
 	private CellRepository cellRepository;
 
-	private VaccineStockRepository vaccineRepository;
+	private VaccineStockRepository vaccineStockRepository;
 
 	public ReservationService(ReservationRepository reservationRepository, CellRepository cellRepository,
-			VaccineStockRepository vaccineRepository) {
+			VaccineStockRepository vaccineStockRepository) {
 		this.reservationRepository = reservationRepository;
 		this.cellRepository = cellRepository;
-		this.vaccineRepository = vaccineRepository;
+		this.vaccineStockRepository = vaccineStockRepository;
 	}
 
 	@Transactional
@@ -47,7 +47,7 @@ public class ReservationService {
 
 		// ワクチンと時間枠の確保
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
-		var vaccineStocks = vaccineRepository
+		var vaccineStocks = vaccineStockRepository
 				.getByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(cell.getRoomId(), LocalDate.now());
 
 		// ワクチン在庫確認
