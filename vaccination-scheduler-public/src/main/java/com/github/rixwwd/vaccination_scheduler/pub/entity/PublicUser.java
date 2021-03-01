@@ -7,10 +7,12 @@ import java.util.Collection;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -54,10 +56,10 @@ public class PublicUser implements UserDetails {
 	@Transient
 	private String plainPasswordConfirmation;
 
-	@NotBlank
-	@Size(max = 255)
 	@Column(name = "COUPON")
-	private String coupon;
+	@Embedded
+	@Valid
+	private Coupon coupon;
 
 	@NotBlank
 	@Size(max = 255)
@@ -136,11 +138,11 @@ public class PublicUser implements UserDetails {
 		this.plainPasswordConfirmation = plainPasswordConfirmation;
 	}
 
-	public String getCoupon() {
+	public Coupon getCoupon() {
 		return coupon;
 	}
 
-	public void setCoupon(String coupon) {
+	public void setCoupon(Coupon coupon) {
 		this.coupon = coupon;
 	}
 

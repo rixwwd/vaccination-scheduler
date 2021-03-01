@@ -19,8 +19,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "VACCINES")
-public class Vaccine {
+@Table(name = "VACCINE_STOCKS")
+public class VaccineStock {
 
 	@Id
 	@Column(name = "ID")
@@ -106,4 +106,7 @@ public class Vaccine {
 		this.updatedAt = updatedAt;
 	}
 
+	public boolean isEnough(long todayReservationCount) {
+		return todayReservationCount < quantity;
+	}
 }

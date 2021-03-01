@@ -53,7 +53,7 @@ public class ReservationController {
 		}
 
 		reservation.setPublicUserId(publicUser.getId());
-		reservationService.reserve(reservation);
+		reservationService.reserve(reservation, publicUser.getCoupon());
 
 		return new ModelAndView("redirect:/reservation/");
 	}

@@ -11,7 +11,7 @@ create table cells (
   room_id uuid not null,
   begin_time timestamp not null,
   end_time timestamp not null,
-  max_number_of_people integer not null,
+  capacity integer not null,
   
   created_at timestamp not null,
   updated_at timestamp not null,
@@ -53,11 +53,14 @@ create table reservations (
   created_at timestamp not null,
   
   foreign key (cell_id) references cells (id),
-  foreign key (public_user_id) references public_users (id)
+  foreign key (public_user_id) references public_users (id),
+  
+  unique (public_user_id, coupon)
 );
 
 
-create table vaccines(
+
+create table vaccine_stocks (
   id uuid primary key,
   expected_delivery_date date,
   quantity integer not null,
@@ -66,6 +69,7 @@ create table vaccines(
   created_at timestamp not null,
   updated_at timestamp not null
 );
+create index vaccine_stocks_room_id_expected_delivery_date on vaccine_stocks (room_id, expected_delivery_date);
 
 
 create table vaccination_histories (

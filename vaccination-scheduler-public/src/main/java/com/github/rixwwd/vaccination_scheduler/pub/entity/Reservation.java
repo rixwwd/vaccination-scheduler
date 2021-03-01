@@ -4,22 +4,21 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "RESERVATIONS")
@@ -47,10 +46,10 @@ public class Reservation {
 	@JoinColumn(name = "PUBLIC_USER_ID", insertable = false, updatable = false)
 	private PublicUser publicUser;
 
-	@NotBlank
-	@Size(max = 255)
+	@Valid
+	@Embedded
 	@Column(name = "COUPON")
-	private String coupon;
+	private Coupon coupon;
 
 	@Column(name = "RESERVATION_NUMBER")
 	private String reservationNumber;
@@ -99,11 +98,11 @@ public class Reservation {
 		this.publicUser = publicUser;
 	}
 
-	public String getCoupon() {
+	public Coupon getCoupon() {
 		return coupon;
 	}
 
-	public void setCoupon(String coupon) {
+	public void setCoupon(Coupon coupon) {
 		this.coupon = coupon;
 	}
 

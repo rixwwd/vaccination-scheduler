@@ -14,7 +14,7 @@
 	<label for="coupon">Coupon</label>
 	<input type="text" th:field="*{coupon}" th:errorclass="field-error" />
 	<ul>
-		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('coupon.coupon')}" th:text="${err}" />
 	</ul>
 	<br>
 	
