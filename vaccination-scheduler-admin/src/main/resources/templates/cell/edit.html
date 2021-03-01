@@ -29,10 +29,10 @@
 	</ul>
 	<br>
 	
-	<label for="maxNumberOfPeople">Max Number Of People</label>
-	<input type="text" th:field="*{maxNumberOfPeople}" th:errorclass="field-error" />
+	<label for="capacity">Capacity</label>
+	<input type="text" th:field="*{capacity}" th:errorclass="field-error" />
 	<ul>
-		<li th:each="err : ${#fields.errors('maxNumberOfPeople')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('capacity')}" th:text="${err}" />
 	</ul>
 	<br>
 

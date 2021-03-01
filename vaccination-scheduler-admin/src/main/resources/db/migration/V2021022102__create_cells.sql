@@ -3,7 +3,7 @@ create table cells (
   room_id uuid not null,
   begin_time timestamp not null,
   end_time timestamp not null,
-  max_number_of_people integer not null,
+  capacity integer not null,
   
   created_at timestamp not null,
   updated_at timestamp not null,

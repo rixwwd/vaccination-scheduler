@@ -17,7 +17,7 @@
 				<th>Room Id</th>
 				<th>Begin Time</th>
 				<th>End Time</th>
-				<th>Max Number Of People</th>
+				<th>Capacity</th>
 				<th colspan="2"></th>
 			</tr>
 		</thead>
@@ -33,7 +33,7 @@
 					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.endTime}">1</a>
 				</td>
 				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.maxNumberOfPeople}">1</a>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.capacity}">1</a>
 				</td>
 				<td>
 					<a href="#" th:href="@{/cell/{id}/edit(id=${cell.id})}">Edit</a>

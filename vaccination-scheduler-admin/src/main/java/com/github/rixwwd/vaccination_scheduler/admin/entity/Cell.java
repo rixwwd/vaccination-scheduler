@@ -49,8 +49,8 @@ public class Cell {
 	private LocalDateTime endTime;
 
 	@Min(1)
-	@Column(name = "MAX_NUMBER_OF_PEOPLE")
-	private int maxNumberOfPeople;
+	@Column(name = "CAPACITY")
+	private int capacity;
 
 	@CreatedDate
 	@Column(name = "CREATED_AT")
@@ -100,15 +100,15 @@ public class Cell {
 		this.endTime = endTime;
 	}
 
-	public int getMaxNumberOfPeople() {
-		return maxNumberOfPeople;
+	public int getCapacity() {
+		return capacity;
 	}
 
-	public void setMaxNumberOfPeople(int maxNumberOfPeople) {
-		this.maxNumberOfPeople = maxNumberOfPeople;
+	public void setCapacity(int capacity) {
+		this.capacity = capacity;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 

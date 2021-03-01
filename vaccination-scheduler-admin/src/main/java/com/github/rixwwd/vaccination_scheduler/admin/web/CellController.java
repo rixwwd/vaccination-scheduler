@@ -86,7 +86,7 @@ public class CellController {
 		updatedCell.setRoomId(cell.getRoomId());
 		updatedCell.setBeginTime(cell.getBeginTime());
 		updatedCell.setEndTime(cell.getEndTime());
-		updatedCell.setMaxNumberOfPeople(cell.getMaxNumberOfPeople());
+		updatedCell.setCapacity(cell.getCapacity());
 
 		var newCell = cellRepository.save(updatedCell);
 
@@ -104,6 +104,6 @@ public class CellController {
 
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
-		binder.setAllowedFields("roomId", "beginTime", "endTime", "maxNumberOfPeople");
+		binder.setAllowedFields("roomId", "beginTime", "endTime", "capacity");
 	}
 }
