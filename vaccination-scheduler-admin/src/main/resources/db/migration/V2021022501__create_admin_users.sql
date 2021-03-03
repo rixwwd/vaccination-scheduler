@@ -11,4 +11,4 @@ create table admin_users (
 
 create unique index admin_users_username on admin_users (username);
 
-insert into admin_users (id, username, password, enabled, name, created_at, updated_at) values (random_uuid(), 'admin', '{noop}admin', true, 'Admin', current_timestamp, current_timestamp);
+insert into admin_users (id, username, password, enabled, name, created_at, updated_at) values ('057f57a6-c2f4-4dea-8444-1bdb769253b7', 'admin', '{noop}admin', true, 'Admin', current_timestamp, current_timestamp);
