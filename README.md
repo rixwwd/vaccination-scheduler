@@ -42,3 +42,28 @@ COVID-19の予防接種の予約をスケジュールすることを題材とし
 1. 問診票を記入する。
 1. 受付でクーポン、予約番号を提示し、本人確認を行う。
 1. ワクチンの接種を受ける。
+
+## インストール
+
+### Heroku
+
+クローンする。
+
+```sh
+git clone https://github.com/rixwwd/vaccination-scheduler.git
+heroku login
+```
+
+vaccination-scheduler-adminのインストール
+
+```sh
+cd vaccination-scheduler/vaccination-scheduler-admin
+./mvnw clean heroku:deploy
+```
+
+vaccination-scheduler-publicのインストール
+
+```sh
+cd vaccination-scheduler/vaccination-scheduler-public
+./mvnw clean heroku:deploy
+```
