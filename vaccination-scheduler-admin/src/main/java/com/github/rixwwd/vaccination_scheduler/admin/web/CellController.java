@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -9,21 +10,26 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Cell;
+import com.github.rixwwd.vaccination_scheduler.admin.entity.Room;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NotFoundException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CellRepository;
+import com.github.rixwwd.vaccination_scheduler.admin.repository.RoomRepository;
 
 @Controller
 public class CellController {
 
+	private RoomRepository roomRepository;
 	private CellRepository cellRepository;
 
-	public CellController(CellRepository cellRepository) {
+	public CellController(RoomRepository roomRepository, CellRepository cellRepository) {
+		this.roomRepository = roomRepository;
 		this.cellRepository = cellRepository;
 	}
 
@@ -105,5 +111,10 @@ public class CellController {
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
 		binder.setAllowedFields("roomId", "beginTime", "endTime", "capacity");
+	}
+
+	@ModelAttribute("rooms")
+	List<Room> rooms() {
+		return roomRepository.findAll();
 	}
 }

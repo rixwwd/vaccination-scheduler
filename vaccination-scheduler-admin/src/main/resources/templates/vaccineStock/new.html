@@ -22,7 +22,9 @@
 	<br>
 	
 	<label for="roomId">Room Id</label>
-	<input type="text" th:field="*{roomId}" th:errorclass="field-error" />
+	<select th:field="*{roomId}">
+		<option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}" th:errorclass="field-error">Room1</option>
+	</select>
 	<ul>
 		<li th:each="err : ${#fields.errors('roomId')}" th:text="${err}" />
 	</ul>

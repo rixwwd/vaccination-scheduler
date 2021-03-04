@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
@@ -9,13 +10,16 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.rixwwd.vaccination_scheduler.admin.entity.Room;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccineStock;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NotFoundException;
+import com.github.rixwwd.vaccination_scheduler.admin.repository.RoomRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccineStockRepository;
 
 @Controller
@@ -23,8 +27,11 @@ public class VaccineStockController {
 
 	private VaccineStockRepository vaccineStockRepository;
 
-	public VaccineStockController(VaccineStockRepository vaccineStockRepository) {
+	private RoomRepository roomRepository;
+
+	public VaccineStockController(RoomRepository roomRepository, VaccineStockRepository vaccineStockRepository) {
 		this.vaccineStockRepository = vaccineStockRepository;
+		this.roomRepository = roomRepository;
 	}
 
 	@GetMapping("/vaccineStock/")
@@ -105,5 +112,10 @@ public class VaccineStockController {
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
 		binder.setAllowedFields("expectedDeliveryDate", "quantity", "roomId");
+	}
+
+	@ModelAttribute("rooms")
+	List<Room> rooms() {
+		return roomRepository.findAll();
 	}
 }
