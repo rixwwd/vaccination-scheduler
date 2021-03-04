@@ -3,6 +3,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:fragment="layout(title, links, content)">
 <head>
+  <meta charset="UTF-8">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <title>COVID-19 Vaccination Scheduler</title>
   <th:block th:replace="${links}" />
 </head>
@@ -15,5 +18,6 @@
 </div>
 
 <div th:replace="${content}"></div>
+<script type="text/javascript" th:src="@{/js/application.js}"></script>
 </body>
 </html>

@@ -13,3 +13,10 @@ spring:
         enabled: true
   session:
     timeout: 15m
+  web:
+    resources:
+      chain:
+        strategy:
+          content:
+            enabled: true
+
