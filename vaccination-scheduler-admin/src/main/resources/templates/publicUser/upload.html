@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="content">
+		<h1>upload public users</h1>
+
+		<form th:action="@{/publicUser/upload}" method="post" accept="text/csv" enctype="multipart/form-data">
+
+			<label for="csv">CSV</label>
+			<input type="file" id="csv" name="csv">
+			<br>
+			
+			<input type="submit">
+		</form>
+
+		<a th:href="@{/publicUser/}">Back</a>
+	</div>
+</body>
+</html>

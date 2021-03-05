@@ -20,10 +20,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+
 @Entity
 @Table(name = "PUBLIC_USERS")
-@EntityListeners(AuditingEntityListener.class)
-public class PublicUser {
+@EntityListeners({ AuditingEntityListener.class, PasswordEncodeListener.class })
+public class PublicUser implements PasswordEncodable {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -39,8 +43,8 @@ public class PublicUser {
 	@Column(name = "PASSWORD")
 	private String password;
 
-	@NotBlank(groups = Create.class)
-	@Size(max = 255, groups = { Create.class, UpdatePassword.class })
+	@NotBlank(groups = { Create.class, CreateFromCSV.class })
+	@Size(max = 255, groups = { Create.class, UpdatePassword.class, CreateFromCSV.class })
 	@Transient
 	private String plainPassword;
 
@@ -65,6 +69,8 @@ public class PublicUser {
 
 	@DateTimeFormat(pattern = "uuuu-MM-dd")
 	@Column(name = "BIRTHDAY")
+	@JsonFormat(pattern = "uuuu-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate birthday;
 
 	@Size(max = 255)
@@ -215,5 +221,45 @@ public class PublicUser {
 	}
 
 	public static interface UpdatePassword {
+	}
+
+	public static interface CreateFromCSV {
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("PublicUser [id=");
+		builder.append(id);
+		builder.append(", loginName=");
+		builder.append(loginName);
+		builder.append(", password=");
+		builder.append(password);
+		builder.append(", plainPassword=");
+		builder.append(plainPassword);
+		builder.append(", plainPasswordConfirmation=");
+		builder.append(plainPasswordConfirmation);
+		builder.append(", coupon=");
+		builder.append(coupon);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", hurigana=");
+		builder.append(hurigana);
+		builder.append(", birthday=");
+		builder.append(birthday);
+		builder.append(", address=");
+		builder.append(address);
+		builder.append(", telephoneNumber=");
+		builder.append(telephoneNumber);
+		builder.append(", email=");
+		builder.append(email);
+		builder.append(", sms=");
+		builder.append(sms);
+		builder.append(", createdAt=");
+		builder.append(createdAt);
+		builder.append(", updatedAt=");
+		builder.append(updatedAt);
+		builder.append("]");
+		return builder.toString();
 	}
 }

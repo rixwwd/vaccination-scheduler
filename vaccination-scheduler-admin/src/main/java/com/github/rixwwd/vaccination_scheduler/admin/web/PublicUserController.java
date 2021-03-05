@@ -1,11 +1,12 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.validation.groups.Default;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.PublicUser;
@@ -22,14 +25,19 @@ import com.github.rixwwd.vaccination_scheduler.admin.entity.PublicUser.Create;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.PublicUser.UpdatePassword;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NotFoundException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.PublicUserRepository;
+import com.github.rixwwd.vaccination_scheduler.admin.service.PublicUserUploadService;
 
 @Controller
 public class PublicUserController {
 
 	private PublicUserRepository publicUserRepository;
 
-	public PublicUserController(PublicUserRepository publicUserRepository) {
+	private PublicUserUploadService publicUserUploadService;
+
+	public PublicUserController(PublicUserRepository publicUserRepository,
+			PublicUserUploadService publicUserUploadService) {
 		this.publicUserRepository = publicUserRepository;
+		this.publicUserUploadService = publicUserUploadService;
 	}
 
 	@GetMapping("/publicUser/")
@@ -59,8 +67,6 @@ public class PublicUserController {
 		}
 
 		// FIXME plainPasswordとplainPasswordCtonfirmationの一致確認
-		var passwordEncoder = new BCryptPasswordEncoder();
-		publicUser.setPassword("{bcrypt}" + passwordEncoder.encode(publicUser.getPlainPassword()));
 
 		var newPublicUser = publicUserRepository.save(publicUser);
 
@@ -97,10 +103,6 @@ public class PublicUserController {
 		var updatedPublicUser = publicUserRepository.findById(id).orElseThrow(NotFoundException::new);
 
 		// FIXME plainPasswordとplainPasswordCtonfirmationの一致確認
-		if (publicUser.getPlainPassword() != null && publicUser.getPlainPassword().isEmpty()) {
-			var passwordEncoder = new BCryptPasswordEncoder();
-			updatedPublicUser.setPassword("{bcrypt}" + passwordEncoder.encode(publicUser.getPlainPassword()));
-		}
 
 		updatedPublicUser.setCoupon(publicUser.getCoupon());
 		updatedPublicUser.setName(publicUser.getName());
@@ -120,6 +122,19 @@ public class PublicUserController {
 		publicUserRepository.delete(publicUser);
 
 		return "redirect:/publicUser/";
+	}
+
+	@GetMapping("/publicUser/upload")
+	public ModelAndView upload() {
+		return new ModelAndView("publicUser/upload");
+	}
+
+	@PostMapping("/publicUser/upload")
+	public ModelAndView upload(@RequestParam("csv") MultipartFile file) throws IOException, BindException {
+
+		publicUserUploadService.createPublicUserFromCsv(file.getInputStream());
+
+		return new ModelAndView("redirect:/publicUser/");
 	}
 
 	@InitBinder
