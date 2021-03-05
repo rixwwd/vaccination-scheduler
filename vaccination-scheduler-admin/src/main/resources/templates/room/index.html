@@ -15,13 +15,16 @@
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th colspan="2"></th>
+				<th colspan="3"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="room : ${rooms}">
+				<td th:text="${room.name}">
+					XX体育館
+				</td>
 				<td>
-					<a href="#" th:href="@{/room/{id}(id=${room.id})}" th:text="${room.name}">XX体育館</a>
+					<a href="#" th:href="@{/room/{id}(id=${room.id})}">Detail</a>
 				</td>
 				<td>
 					<a href="#" th:href="@{/room/{id}/edit(id=${room.id})}">Edit</a>

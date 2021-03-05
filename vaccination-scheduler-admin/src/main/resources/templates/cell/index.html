@@ -14,26 +14,29 @@
 	<table>
 		<thead>
 			<tr>
-				<th>Room Id</th>
+				<th>Room</th>
 				<th>Begin Time</th>
 				<th>End Time</th>
 				<th>Capacity</th>
-				<th colspan="2"></th>
+				<th colspan="3"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="cell : ${cells}">
-				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.roomId}">1</a>
+				<td th:text="${cell.room.name}">
+					市役所
+				</td>
+				<td th:text="${cell.beginTime}">
+					2021-04-01 10:00
+				</td>
+				<td th:text="${cell.endTime}">
+					2021-04-01 10:30
+				</td>
+				<td th:text="${cell.capacity}">
+					100
 				</td>
 				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.beginTime}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.endTime}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" th:text="${cell.capacity}">1</a>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}">Detail</a>
 				</td>
 				<td>
 					<a href="#" th:href="@{/cell/{id}/edit(id=${cell.id})}">Edit</a>

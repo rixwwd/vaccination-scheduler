@@ -24,37 +24,40 @@
 				<th>Telephone Number</th>
 				<th>Email</th>
 				<th>SMS</th>
-				<th colspan="2"></th>
+				<th colspan="3"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="publicUser : ${publicUsers}">
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.loginName}">1</a>
+				<td th:text="${publicUser.loginName}">
+					1234567890
+				</td>
+				<td th:text="${publicUser.coupon}">
+					12345678
+				</td>
+				<td th:text="${publicUser.name}">
+					氏名
+				</td>
+				<td th:text="${publicUser.hurigana}">
+					ふりがな
+				</td>
+				<td th:text="${publicUser.birthday}">
+					2021-01-01
+				</td>
+				<td th:text="${publicUser.address}">
+					○県▲市□ 1-2-3
+				</td>
+				<td th:text="${publicUser.telephoneNumber}">
+					0312345678
+				</td>
+				<td th:text="${publicUser.email}">
+					email@example.com
+				</td>
+				<td th:text="${publicUser.sms}">
+					8112345678901
 				</td>
 				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.coupon}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.name}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.hurigana}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.birthday}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.address}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.telephoneNumber}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.email}">1</a>
-				</td>
-				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" th:text="${publicUser.sms}">1</a>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}">Detail</a>
 				</td>
 				<td>
 					<a href="#" th:href="@{/publicUser/{id}/edit(id=${publicUser.id})}">Edit</a>
