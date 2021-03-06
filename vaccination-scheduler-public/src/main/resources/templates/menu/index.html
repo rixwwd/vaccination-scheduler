@@ -20,7 +20,7 @@
 			<tr><th>場所</th><td th:text="${reservation.cell.room.name}"></td></tr>
 			<tr><th>時間</th><td th:text="${reservation.cell.beginTime} + '-' + ${reservation.cell.endTime}">2021/04/01 10:00-11:00</td></tr>
 		</table>
-		<a href="#">キャンセルする</a>	
+		<a href="#" th:href="@{/reservation/}" data-method="delete">キャンセルする</a>	
 	</div>
 </div>
 </body>
