@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:fragment="layout(title, links, content)">
+      th:fragment="layout(title, links, scripts, content)">
 <head>
   <title>COVID-19 Vaccination Scheduler</title>
   <th:block th:replace="${links}" />
+  <th:block th:replace="${scripts}" />
 </head>
 <body>
 

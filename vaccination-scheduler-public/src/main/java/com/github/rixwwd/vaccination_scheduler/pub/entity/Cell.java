@@ -17,6 +17,11 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
 @Entity
 @Table(name = "CELLS")
 public class Cell {
@@ -35,10 +40,13 @@ public class Cell {
 
 	@DateTimeFormat(pattern = "uuuu-MM-dd HH:mm")
 	@Column(name = "BEGIN_TIME")
+	@JsonFormat(pattern = "uuuu-MM-dd HH:mm")
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime beginTime;
 
 	@DateTimeFormat(pattern = "uuuu-MM-dd HH:mm")
 	@Column(name = "END_TIME")
+	@JsonFormat(pattern = "uuuu-MM-dd HH:mm")
 	private LocalDateTime endTime;
 
 	@Min(1)
@@ -47,10 +55,12 @@ public class Cell {
 
 	@CreatedDate
 	@Column(name = "CREATED_AT")
+	@JsonIgnore
 	private LocalDateTime createdAt;
 
 	@LastModifiedDate
 	@Column(name = "UPDATED_AT")
+	@JsonIgnore
 	private LocalDateTime updatedAt;
 
 	public UUID getId() {

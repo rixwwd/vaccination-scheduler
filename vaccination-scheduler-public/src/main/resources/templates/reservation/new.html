@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+      th:replace="~{layout::layout(~{}, ~{}, ~{:://head/script}, ~{::content})}">
 <head>
 <meta charset="UTF-8">
 <title>A</title>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 </head>
 <body>
 <div th:fragment="content">
@@ -18,18 +19,72 @@
 	</ul>
 	<br>
 	
-	<label for="cell">Cell</label>
-	<input type="text" th:field="*{cellId}" th:errorclass="field-error" />
-	<ul>
-		<li th:each="err : ${#fields.errors('cellId')}" th:text="${err}" />
-	</ul>
-	<br>
-	
+	<div id="timeTable">
+		<label for="roomId">Room</label>
+		<select id="roomId" name="roomId" v-model="selectedRoomId">
+			<option value="">選択してください</option>
+			<option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}">Room1</option>
+		</select>
+		<br>
+		<table>
+			<tr v-for="cell in cells">
+				<td>{{ cell.date }}</td>
+				<td v-for="c in cell.cells">
+				<input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id">
+				<label v-bind:for="c.id">{{ c.beginTime}} - {{ c.endTime }}</label>
+				</td>
+			</tr>
+		</table>
+	</div>
 
 	<input type="submit" />
 </form>
 
 <a th:href="@{/}">Cencel</a>
+<script type="text/javascript" th:inline="javascript">
+(function(){
+	function bindRoomAction() {
+		var app = new Vue({
+		      el: '#timeTable',
+		      data: {
+		    	  allCells: /*[[${cells}]]*/[],
+		    	  selectedRoomId: ''
+			  },
+			  computed: {
+				  cells: function() {
+					  //return this.allCells.filter(cell => cell.roomId === this.selectedRoomId)
+					var selectCells = this.allCells.filter(cell => cell.roomId === this.selectedRoomId)
+					    .reduce((acc, cur)=>{
+					    	var key = cur.beginTime.split(' ')[0];
+					    	if (acc[key]) {
+					    		acc[key].push(cur);
+					    	} else {
+                    		   acc[key] = [cur];
+                    		}
+					    	return acc;
+                       }, {});
+					var date = Object.keys(selectCells).sort();
+					var list = [];
+					for (var i = 0; i < date.length; i++) {
+						var dateCell = {date: date[i], cells: []};
+						var times = selectCells[date[i]].sort((a,b) => a.beginTime - b.beginTime );
+						for (var j = 0; j < times.length; j++) {
+							t = {...times[j]}
+							t.beginTime = times[j].beginTime.split(' ')[1];
+							t.endTime = times[j].endTime.split(' ')[1];
+							dateCell.cells.push(t);
+						}
+						list.push(dateCell);
+					}
+					return list;
+				  }
+			  }
+		})
+	}
+	
+	window.addEventListener("DOMContentLoaded", bindRoomAction);
+})();
+</script>
 </div>
 </body>
 </html>
