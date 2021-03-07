@@ -55,7 +55,9 @@ public class ReservationController {
 			return new ModelAndView("reservation/new");
 		}
 
+		var cell = cellRepository.findById(reservation.getCellId()).orElseThrow();
 		var modelAndView = new ModelAndView("reservation/confirm");
+		modelAndView.addObject("cell", cell);
 		return modelAndView;
 	}
 

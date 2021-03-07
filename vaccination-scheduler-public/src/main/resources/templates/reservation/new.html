@@ -2,45 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout::layout(~{}, ~{}, ~{:://head/script}, ~{::content})}">
 <head>
-<meta charset="UTF-8">
-<title>A</title>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <link href="../../static/css/application.css" th:href="@{/css/application.css}" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
 </head>
 <body>
-<div th:fragment="content">
-<h1>new reservation</h1>
+<div th:fragment="content" class="container-md">
+<h1>予約</h1>
 
 <form th:action="@{/reservation/confirm}" th:object="${reservation}" method="post">
 
-	<label for="coupon">Coupon</label>
-	<input type="text" th:field="*{coupon}" th:errorclass="field-error" />
+  <div class="mb-3">
+    <label for="coupon" class="form-label">クーポン</label>
+    <input type="text" th:field="*{coupon}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('coupon.coupon')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('coupon.coupon')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<div id="timeTable">
-		<label for="roomId">Room</label>
-		<select id="roomId" name="roomId" v-model="selectedRoomId">
-			<option value="">選択してください</option>
-			<option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}">Room1</option>
-		</select>
-		<br>
-		<table>
-			<tr v-for="cell in cells">
-				<td>{{ cell.date }}</td>
-				<td v-for="c in cell.cells">
-				<input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id">
-				<label v-bind:for="c.id">{{ c.beginTime}} - {{ c.endTime }}</label>
-				</td>
-			</tr>
-		</table>
+  </div>
+  <div id="timeTable">
+    <div class="mb-3">
+	  <label for="roomId" class="form-label">場所</label>
+	  <select id="roomId" name="roomId" v-model="selectedRoomId" class="form-select">
+	    <option value="">選択してください</option>
+	    <option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}">Room1</option>
+	  </select>
 	</div>
-
-	<input type="submit" />
+    <div class="mb-3">
+    <template v-for="cell in cells">
+	  <label class="form-label">{{ cell.date }}</label><br>
+	  <div class="form-check">
+	  <template v-for="c in cell.cells">
+        <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input">
+        <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }}</label>
+        <br>
+	  </template>
+	  </div>
+	</template>
+    </div>
+  </div>
+  <div class="mb-3">
+	<button type="submit" class="btn btn-primary">予約する</button>
+  </div>
 </form>
 
-<a th:href="@{/}">Cencel</a>
+<a th:href="@{/}" class="btn btn-secondary">キャンセル</a>
+
 <script type="text/javascript" th:inline="javascript">
 (function(){
 	function bindRoomAction() {
