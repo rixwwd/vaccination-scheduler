@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
 <head>
-<meta charset="UTF-8">
-<title>A</title>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </head>
 <body>
-<div th:fragment="content">
-	<h1>cells</h1>
+<div th:fragment="content" class="container-md">
+	<h1>時間枠</h1>
 	
-	<a href="#" th:href="@{/cell/new}">new cell</a>
+	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <a href="#" th:href="@{/cell/new}" class="btn btn-primary">追加</a>
+	</div>
 	
-	<table>
+	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>Room</th>
-				<th>Begin Time</th>
-				<th>End Time</th>
-				<th>Capacity</th>
+				<th>場所</th>
+				<th>開始日時</th>
+				<th>終了日時</th>
+				<th>人数</th>
 				<th colspan="3"></th>
 			</tr>
 		</thead>
@@ -26,23 +29,23 @@
 				<td th:text="${cell.room.name}">
 					市役所
 				</td>
-				<td th:text="${cell.beginTime}">
-					2021-04-01 10:00
+				<td th:text="${#temporals.format(cell.beginTime, 'uuuu/MM/dd HH:mm')}">
+					2021/04/01 10:00
 				</td>
-				<td th:text="${cell.endTime}">
-					2021-04-01 10:30
+				<td th:text="${#temporals.format(cell.endTime, 'uuuu/MM/dd HH:mm')}">
+					2021/04/01 10:30
 				</td>
-				<td th:text="${cell.capacity}">
+				<td th:text="${#numbers.formatInteger(cell.capacity,1,'COMMA')}" class="text-end">
 					100
 				</td>
 				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}">Detail</a>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}">詳細</a>
 				</td>
 				<td>
-					<a href="#" th:href="@{/cell/{id}/edit(id=${cell.id})}">Edit</a>
+					<a href="#" th:href="@{/cell/{id}/edit(id=${cell.id})}">編集</a>
 				</td>
 				<td>
-					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" data-method="delete">Delete</a>
+					<a href="#" th:href="@{/cell/{id}(id=${cell.id})}" data-method="delete">削除</a>
 				</td>
 			</tr>
 		</tbody>

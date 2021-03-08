@@ -1,90 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </head>
 <body>
-<div th:fragment="content">
-<h1>edit public user</h1>
+<div th:fragment="content" class="container-md">
+<h1>住民の編集</h1>
 
 <form th:action="@{/publicUser/{id}(id=${publicUser.id})}" th:object="${publicUser}" method="post">
 	<input type="hidden" name="_method" value="PATCH">
 
-	<label for="plainPassword">Password</label>
-	<input type="password" th:field="*{plainPassword}" th:errorclass="field-error" />
+　　<div class="mb-3">
+	<label for="plainPassword" class="form-label">パスワード</label>
+	<input type="password" th:field="*{plainPassword}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('plainPassword')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('plainPassword')}" th:text="${err}">
 	</ul>
-	<br>
-
-	<label for="plainPasswordConfirmation">Password Confirmation</label>
-	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="plainPasswordConfirmation" class="form-label">パスワード(確認)</label>
+	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('plainPasswordConfirmation')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('plainPasswordConfirmation')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="coupon">Coupon</label>
-	<input type="text" th:field="*{coupon}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="coupon" class="form-label">クーポン</label>
+	<input type="text" th:field="*{coupon}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="name">Name</label>
-	<input type="text" th:field="*{name}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="name" class="form-label">氏名</label>
+	<input type="text" th:field="*{name}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('name')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('name')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="hurigana">Hurigana</label>
-	<input type="text" th:field="*{hurigana}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="hurigana" class="form-label">ふりがな</label>
+	<input type="text" th:field="*{hurigana}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('hurigana')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('hurigana')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="birthday">Birthday</label>
-	<input type="text" th:field="*{birthday}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="birthday" class="form-label">誕生日</label>
+	<input type="text" th:field="*{birthday}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('birthday')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('birthday')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="address">Address</label>
-	<input type="text" th:field="*{address}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="address" class="form-label">住所</label>
+	<input type="text" th:field="*{address}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('address')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('address')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="telephoneNumber">Telephone Number</label>
-	<input type="text" th:field="*{telephoneNumber}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="telephoneNumber" class="form-label">電話</label>
+	<input type="text" th:field="*{telephoneNumber}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('telephoneNumber')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('telephoneNumber')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="email">Email</label>
-	<input type="text" th:field="*{email}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="email" class="form-label">メール</label>
+	<input type="text" th:field="*{email}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('email')}" th:text="${err}">
 	</ul>
-	<br>
-	
-	<label for="sms">SMS</label>
-	<input type="text" th:field="*{sms}" th:errorclass="field-error" />
+  </div>
+  <div class="mb-3">
+	<label for="sms" class="form-label">SMS</label>
+	<input type="text" th:field="*{sms}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('sms')}" th:text="${err}" />
+		<li th:each="err : ${#fields.errors('sms')}" th:text="${err}">
 	</ul>
-	<br>
-
-	<input type="submit" />
+  </div>
+  <div class="mb-3">
+	<button type="submit" class="btn btn-primary">更新</button>
+  </div>
 </form>
 
-<a th:href="@{/publicUser/}">Back</a>
+<a th:href="@{/publicUser/}" class="btn btn-secondary">キャンセル</a>
 </div>
 </body>
 </html>

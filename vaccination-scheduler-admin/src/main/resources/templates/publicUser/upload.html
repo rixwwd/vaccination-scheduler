@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+	th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </head>
 <body>
-	<div th:fragment="content">
-		<h1>upload public users</h1>
+	<div th:fragment="content" class="container-md">
+		<h1>CSVから取り込み</h1>
 
 		<form th:action="@{/publicUser/upload}" method="post" accept="text/csv" enctype="multipart/form-data">
 
-			<label for="csv">CSV</label>
-			<input type="file" id="csv" name="csv">
-			<br>
-			
-			<input type="submit">
+		  <div class="mb-3">
+			<label for="csv" class="form-label">CSVファイル選択</label>
+			<input type="file" id="csv" name="csv" class="form-control">
+		  </div>
+		  <div class="mb-3">
+			<button type="submit" class="btn btn-primary">取り込み</button>
+		　</div>
 		</form>
 
-		<a th:href="@{/publicUser/}">Back</a>
+		<a th:href="@{/publicUser/}" class="btn btn-secondary">キャンセル</a>
 	</div>
 </body>
 </html>

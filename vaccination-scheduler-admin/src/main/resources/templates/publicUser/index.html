@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout::layout(~{}, ~{}, ~{::content})}">
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
 <head>
-<meta charset="UTF-8">
-<title>A</title>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </head>
 <body>
-<div th:fragment="content">
-	<h1>public users</h1>
+<div th:fragment="content" class="container-md">
+	<h1>住民</h1>
 	
-	<a href="#" th:href="@{/publicUser/new}">new public user</a><br>
-	<a href="#" th:href="@{/publicUser/upload}">upload public user</a>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <a href="#" th:href="@{/publicUser/upload}" class="btn btn-primary">CSVから取り込み</a>
+      <a href="#" th:href="@{/publicUser/new}" class="btn btn-primary">追加</a>
+	</div>
 	
-	<table>
+	<table class="table table-hover">
 		<thead>
 			<tr>
-				<th>Login Name</th>
-				<th>Coupon</th>
-				<th>Name</th>
-				<th>Hurigana</th>
-				<th>Birthday</th>
-				<th>Address</th>
-				<th>Telephone Number</th>
-				<th>Email</th>
+				<th>ログインID</th>
+				<th>クーポン</th>
+				<th>氏名</th>
+				<th>ふりがな</th>
+				<th>誕生日</th>
+				<th>住所</th>
+				<th>電話</th>
+				<th>メール</th>
 				<th>SMS</th>
 				<th colspan="3"></th>
 			</tr>
@@ -57,13 +60,13 @@
 					8112345678901
 				</td>
 				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}">Detail</a>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}">詳細</a>
 				</td>
 				<td>
-					<a href="#" th:href="@{/publicUser/{id}/edit(id=${publicUser.id})}">Edit</a>
+					<a href="#" th:href="@{/publicUser/{id}/edit(id=${publicUser.id})}">編集</a>
 				</td>
 				<td>
-					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" data-method="delete">Delete</a>
+					<a href="#" th:href="@{/publicUser/{id}(id=${publicUser.id})}" data-method="delete">削除</a>
 				</td>
 			</tr>
 		</tbody>
