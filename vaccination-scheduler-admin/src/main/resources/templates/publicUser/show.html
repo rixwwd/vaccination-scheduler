@@ -8,20 +8,22 @@
 </head>
 <body>
 <div th:fragment="content" class="container-md">
-<p>
-ID: [[${publicUser.id}]]<br>
-Login Name: [[${publicUser.loginName}]]<br>
-Coupon: [[${publicUser.coupon}]]<br>
-Name: [[${publicUser.name}]]<br>
-Hurigana: [[${publicUser.hurigana}]]<br>
-Birthday: [[${publicUser.birthday}]]<br>
-Address: [[${publicUser.address}]]<br>
-Telephone Number: [[${publicUser.telephoneNumber}]]<br>
-Email: [[${publicUser.email}]]<br>
-SMS: [[${publicUser.sms}]]<br>
-</p>
 
-<a th:href="@{/publicUser/}" class="btn btn-secondary">キャンセル</a>
+<h1>住民の詳細</h1>
+
+<table class="table">
+  <tr><th>ログイン名</th><td th:text="${publicUser.loginName}">xxxx</td></tr>
+  <tr><th>クーポン</th><td th:text="${publicUser.coupon}">xxxx</td></tr>
+  <tr><th>氏名</th><td th:text="${publicUser.name}">xxxx</td></tr>
+  <tr><th>ふりがな</th><td th:text="${publicUser.hurigana}">xxxx</td></tr>
+  <tr><th>誕生日</th><td th:text="${publicUser.birthday}">xxxx</td></tr>
+  <tr><th>住所</th><td th:text="${publicUser.address}">xxxx</td></tr>
+  <tr><th>電話</th><td th:text="${publicUser.telephoneNumber}">xxxx</td></tr>
+  <tr><th>メール</th><td th:text="${publicUser.email}">xxxx</td></tr>
+  <tr><th>SMS</th><td th:text="${publicUser.sms}">xxxx</td></tr>
+</table>
+
+<a th:href="@{/publicUser/}" class="btn btn-secondary">一覧へ戻る</a>
 </div>
 </body>
 </html>

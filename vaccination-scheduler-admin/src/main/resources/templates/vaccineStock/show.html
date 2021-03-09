@@ -8,14 +8,16 @@
 </head>
 <body>
 <div th:fragment="content" class="container-md">
-<p>
-ID: [[${vaccineStock.id}]]<br>
-Expected Delivery Date: [[${vaccineStock.expectedDeliveryDate}]]<br>
-Quantity: [[${vaccineStock.quantity}]]<br>
-Room ID: [[${vaccineStock.roomId}]]<br>
-</p>
 
-<a th:href="@{/vaccineStock/}" class="btn btn-secondary">キャンセル</a>
+<h1>ワクチン在庫の詳細</h1>
+
+<table class="table">
+  <tr><th>配送予定日</th><td th:text="${#temporals.format(vaccineStock.expectedDeliveryDate, 'uuuu/MM/dd')}"></td></tr>
+  <tr><th>数量</th><td th:text="${#numbers.formatInteger(vaccineStock.quantity,1,'COMMA')}"></td></tr>
+  <tr><th>場所</th><td th:text="${vaccineStock.room.name}"></td></tr>
+</table>
+
+<a th:href="@{/vaccineStock/}" class="btn btn-secondary">一覧へ戻る</a>
 </div>
 </body>
 </html>

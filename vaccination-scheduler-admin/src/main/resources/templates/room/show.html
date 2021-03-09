@@ -8,12 +8,14 @@
 </head>
 <body>
 <div th:fragment="content" class="container-md">
-<p>
-ID: [[${room.id}]]<br>
-Name: [[${room.name}]]<br>
-</p>
 
-<a th:href="@{/room/}" class="btn btn-secondary">キャンセル</a>
+<h1>場所の詳細</h1>
+
+<table class="table">
+  <tr><th>名前</th><td th:text="${room.name}"></td></tr>
+</table>
+
+<a th:href="@{/room/}" class="btn btn-secondary">一覧へ戻る</a>
 </div>
 </body>
 </html>

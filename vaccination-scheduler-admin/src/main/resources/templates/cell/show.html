@@ -8,15 +8,17 @@
 </head>
 <body>
 <div th:fragment="content" class="container-md">
-<p>
-ID: [[${cell.id}]]<br>
-Room ID: [[${cell.roomId}]]<br>
-Begin Time: [[${cell.beginTime}]]<br>
-End Time: [[${cell.endTime}]]<br>
-Capacity: [[${cell.capacity}]]<br>
-</p>
 
-<a th:href="@{/cell/}" class="btn btn-secondary">キャンセル</a>
+<h1>時間枠の詳細</h1>
+
+<table class="table">
+  <tr><th>場所</th><td th:text="${cell.room.name}"></td></tr>
+  <tr><th>開始日時</th><td th:text="${#temporals.format(cell.beginTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
+  <tr><th>終了日時</th><td th:text="${#temporals.format(cell.endTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
+  <tr><th>人数</th><td th:text="${#numbers.formatInteger(cell.capacity,1,'COMMA')}"></td></tr>
+</table>
+
+<a th:href="@{/cell/}" class="btn btn-secondary">一覧へ戻る</a>
 </div>
 </body>
 </html>
