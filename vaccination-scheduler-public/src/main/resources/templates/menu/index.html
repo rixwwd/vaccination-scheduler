@@ -29,6 +29,7 @@
         <div class="card-body">
           <h5 class="card-title">予防接種の予約</h5>
           <p class="card-text">
+            予約番号: [[${reservation.reservationNumber}]] <br>
             場所: [[${reservation.cell.room.name}]] <br>
             時間: [[${#temporals.format(reservation.cell.beginTime, 'uuuu/MM/dd HH:mm')} + ' - ' + ${#temporals.format(reservation.cell.endTime, 'HH:mm')}]]
           </p>
