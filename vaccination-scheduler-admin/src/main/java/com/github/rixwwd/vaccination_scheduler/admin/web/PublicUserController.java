@@ -104,7 +104,6 @@ public class PublicUserController {
 
 		// FIXME plainPasswordとplainPasswordCtonfirmationの一致確認
 
-		updatedPublicUser.setCoupon(publicUser.getCoupon());
 		updatedPublicUser.setName(publicUser.getName());
 		updatedPublicUser.setHurigana(publicUser.getHurigana());
 		updatedPublicUser.setBirthday(publicUser.getBirthday());
@@ -139,7 +138,7 @@ public class PublicUserController {
 
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
-		binder.setAllowedFields("loginName", "plainPassword", "plainPasswordConfirmation", "coupon", "name", "hurigana",
-				"birthday", "address");
+		binder.setAllowedFields("loginName", "plainPassword", "plainPasswordConfirmation", "name", "hurigana",
+				"birthday", "address", "telephoneNumber", "email", "sms");
 	}
 }

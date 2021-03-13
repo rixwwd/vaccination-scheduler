@@ -13,7 +13,7 @@
 <form th:action="@{/publicUser/}" th:object="${publicUser}" method="post">
 
   <div class="mb-3">
-	<label for="loginName"class="form-label">ログインID</label>
+	<label for="loginName" class="form-label">ログインID</label>
 	<input type="text" th:field="*{loginName}" th:errorclass="field-error" class="form-control">
 	<ul>
 		<li th:each="err : ${#fields.errors('loginName')}" th:text="${err}" >
@@ -31,13 +31,6 @@
 	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="field-error" class="form-control">
 	<ul>
 		<li th:each="err : ${#fields.errors('plainPasswordConfirmation')}" th:text="${err}">
-	</ul>
-  </div>
-  <div class="mb-3">
-	<label for="coupon" class="form-label">クーポン</label>
-	<input type="text" th:field="*{coupon}" th:errorclass="field-error" class="form-control">
-	<ul>
-		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">

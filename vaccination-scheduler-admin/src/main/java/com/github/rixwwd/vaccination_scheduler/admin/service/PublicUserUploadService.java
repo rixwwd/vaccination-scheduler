@@ -42,7 +42,6 @@ public class PublicUserUploadService {
 		var schema = CsvSchema.builder()
 				.addColumn("loginName", ColumnType.STRING)
 				.addColumn("plainPassword", ColumnType.STRING)
-				.addColumn("coupon", ColumnType.STRING)
 				.addColumn("name", ColumnType.STRING)
 				.addColumn("hurigana", ColumnType.STRING)
 				.addColumn("birthday", ColumnType.STRING)

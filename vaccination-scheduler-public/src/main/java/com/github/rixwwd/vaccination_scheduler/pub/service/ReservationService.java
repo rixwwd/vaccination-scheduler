@@ -9,7 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.rixwwd.vaccination_scheduler.pub.entity.Coupon;
+import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.DuplicateRservationException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.InvalidCouponException;
@@ -39,9 +39,9 @@ public class ReservationService {
 	}
 
 	@Transactional
-	public Reservation reserve(Reservation reservation, Coupon coupon) throws ReserveFailureException {
+	public Reservation reserve(Reservation reservation, PublicUser publicUser) throws ReserveFailureException {
 
-		if (!coupon.equals(reservation.getCoupon())) {
+		if (!publicUser.hasCoupon(reservation.getCoupon())) {
 			throw new InvalidCouponException("coupon mismatch.");
 		}
 

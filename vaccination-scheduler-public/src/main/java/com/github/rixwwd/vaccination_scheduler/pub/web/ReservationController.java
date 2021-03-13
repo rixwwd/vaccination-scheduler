@@ -70,7 +70,7 @@ public class ReservationController {
 		}
 
 		reservation.setPublicUserId(publicUser.getId());
-		reservationService.reserve(reservation, publicUser.getCoupon());
+		reservationService.reserve(reservation, publicUser);
 
 		return new ModelAndView("redirect:/reservation/");
 	}

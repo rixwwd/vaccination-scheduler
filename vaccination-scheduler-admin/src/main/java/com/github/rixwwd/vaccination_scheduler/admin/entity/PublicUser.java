@@ -2,15 +2,20 @@ package com.github.rixwwd.vaccination_scheduler.admin.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -55,11 +60,6 @@ public class PublicUser implements PasswordEncodable {
 
 	@NotBlank
 	@Size(max = 255)
-	@Column(name = "COUPON")
-	private String coupon;
-
-	@NotBlank
-	@Size(max = 255)
 	@Column(name = "NAME")
 	private String name;
 
@@ -88,6 +88,10 @@ public class PublicUser implements PasswordEncodable {
 	@Size(max = 255)
 	@Column(name = "SMS")
 	private String sms;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	@Valid
+	private List<Coupon> coupons;
 
 	@CreatedDate
 	@Column
@@ -135,14 +139,6 @@ public class PublicUser implements PasswordEncodable {
 
 	public void setPlainPasswordConfirmation(String plainPasswordConfirmation) {
 		this.plainPasswordConfirmation = plainPasswordConfirmation;
-	}
-
-	public String getCoupon() {
-		return coupon;
-	}
-
-	public void setCoupon(String coupon) {
-		this.coupon = coupon;
 	}
 
 	public String getName() {
@@ -201,6 +197,14 @@ public class PublicUser implements PasswordEncodable {
 		this.sms = sms;
 	}
 
+	public List<Coupon> getCoupons() {
+		return coupons;
+	}
+
+	public void setCoupons(List<Coupon> coupons) {
+		this.coupons = coupons;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -239,8 +243,6 @@ public class PublicUser implements PasswordEncodable {
 		builder.append(plainPassword);
 		builder.append(", plainPasswordConfirmation=");
 		builder.append(plainPasswordConfirmation);
-		builder.append(", coupon=");
-		builder.append(coupon);
 		builder.append(", name=");
 		builder.append(name);
 		builder.append(", hurigana=");
@@ -255,6 +257,8 @@ public class PublicUser implements PasswordEncodable {
 		builder.append(email);
 		builder.append(", sms=");
 		builder.append(sms);
+		builder.append(", coupons=");
+		builder.append(coupons);
 		builder.append(", createdAt=");
 		builder.append(createdAt);
 		builder.append(", updatedAt=");

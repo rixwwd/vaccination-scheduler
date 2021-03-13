@@ -11,4 +11,6 @@ insert into cells (id, room_id, begin_time, end_time, capacity, created_at, upda
 
 insert into vaccine_stocks (id, expected_delivery_date, quantity, room_id, created_at, updated_at) values ('711afbe5-ee16-455c-879f-e389e7d44735', '2021-03-01', 10, '107c201a-790c-4fcf-bd86-ad60d5f15d39', current_timestamp, current_timestamp);
 
-insert into public_users (id, login_name, password, coupon, name, hurigana, birthday, address, telephone_number, email, sms, created_at, updated_at) values ('5c8ae3ed-faba-45be-b1e2-7b766e791305', '1234567890', '{noop}password', '11111', 'テスト氏名', 'てすとしめい', null, null, null, null, null, current_timestamp, current_timestamp);
+insert into public_users (id, login_name, password, name, hurigana, birthday, address, telephone_number, email, sms, created_at, updated_at) values ('5c8ae3ed-faba-45be-b1e2-7b766e791305', '1234567890', '{noop}password', 'テスト氏名', 'てすとしめい', null, null, null, null, null, current_timestamp, current_timestamp);
+
+insert into coupons (public_user_id, coupon, name, used, used_at, created_at, updated_at) values ('5c8ae3ed-faba-45be-b1e2-7b766e791305', '12345', 'test', false, null, current_timestamp, current_timestamp);

@@ -1,4 +1,4 @@
-package com.github.rixwwd.vaccination_scheduler.pub.entity;
+package com.github.rixwwd.vaccination_scheduler.admin.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

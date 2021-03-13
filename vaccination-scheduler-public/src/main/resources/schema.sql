@@ -26,7 +26,6 @@ create table public_users (
   id uuid primary key,
   login_name varchar not null,
   password varchar not null,
-  coupon varchar not null,
   name varchar not null,
   hurigana varchar,
   birthday date,
@@ -39,7 +38,6 @@ create table public_users (
   updated_at timestamp not null
 );
 
-create unique index public_users_coupon on public_users (coupon);
 create unique index public_users_login_name on public_users(login_name);
 
 
@@ -80,3 +78,19 @@ create table vaccination_histories (
   created_at timestamp not null
 );
 
+create table coupons (
+  public_user_id uuid not null,
+  coupon varchar not null,
+  name varchar not null,
+  used boolean not null,
+  used_at timestamp,
+  created_at timestamp not null,
+  updated_at timestamp not null,
+  
+  primary key (public_user_id, coupon),
+  foreign key (public_user_id) references public_users (id),
+  unique (public_user_id, name)
+  
+);
+
+create index coupons_public_user_id on coupons (public_user_id);

@@ -19,7 +19,6 @@
 		<thead>
 			<tr>
 				<th>ログインID</th>
-				<th>クーポン</th>
 				<th>氏名</th>
 				<th>ふりがな</th>
 				<th>誕生日</th>
@@ -34,9 +33,6 @@
 			<tr th:each="publicUser : ${publicUsers}">
 				<td th:text="${publicUser.loginName}">
 					1234567890
-				</td>
-				<td th:text="${publicUser.coupon}">
-					12345678
 				</td>
 				<td th:text="${publicUser.name}">
 					氏名

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Cell;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Coupon;
+import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.VaccineStock;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
@@ -63,7 +65,7 @@ class ReservationServiceTest {
 
 		var reservation = new Reservation();
 		reservation.setCellId(cellId);
-		reservation.setCoupon(new Coupon("12345"));
+		reservation.setCoupon("12345");
 
 		when(reservationRepository.saveAndFlush(reservation)).thenAnswer(new Answer<Reservation>() {
 
@@ -73,7 +75,11 @@ class ReservationServiceTest {
 			}
 		});
 
-		var actualReservation = reservationService.reserve(reservation, new Coupon("12345"));
+		var publicUser = new PublicUser();
+		var coupon = new Coupon();
+		coupon.setCoupon("12345");
+		publicUser.setCoupons(List.of(coupon));
+		var actualReservation = reservationService.reserve(reservation, publicUser);
 
 		assertNotNull(actualReservation.getReservationNumber());
 	}

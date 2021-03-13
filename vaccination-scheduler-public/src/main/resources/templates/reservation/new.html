@@ -18,7 +18,7 @@
     <label for="coupon" class="form-label">クーポン</label>
     <input type="text" th:field="*{coupon}" th:errorclass="field-error" class="form-control">
 	<ul>
-		<li th:each="err : ${#fields.errors('coupon.coupon')}" th:text="${err}">
+		<li th:each="err : ${#fields.errors('coupon')}" th:text="${err}">
 	</ul>
   </div>
   <div id="timeTable">

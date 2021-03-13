@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
@@ -56,11 +59,6 @@ public class PublicUser implements UserDetails {
 	@Transient
 	private String plainPasswordConfirmation;
 
-	@Column(name = "COUPON")
-	@Embedded
-	@Valid
-	private Coupon coupon;
-
 	@NotBlank
 	@Size(max = 255)
 	@Column(name = "NAME")
@@ -89,6 +87,10 @@ public class PublicUser implements UserDetails {
 	@Size(max = 255)
 	@Column(name = "SMS")
 	private String sms;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	@Valid
+	private List<Coupon> coupons;
 
 	@CreatedDate
 	@Column
@@ -136,14 +138,6 @@ public class PublicUser implements UserDetails {
 
 	public void setPlainPasswordConfirmation(String plainPasswordConfirmation) {
 		this.plainPasswordConfirmation = plainPasswordConfirmation;
-	}
-
-	public Coupon getCoupon() {
-		return coupon;
-	}
-
-	public void setCoupon(Coupon coupon) {
-		this.coupon = coupon;
 	}
 
 	public String getName() {
@@ -202,6 +196,14 @@ public class PublicUser implements UserDetails {
 		this.sms = sms;
 	}
 
+	public List<Coupon> getCoupons() {
+		return coupons;
+	}
+
+	public void setCoupons(List<Coupon> coupons) {
+		this.coupons = coupons;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -246,6 +248,10 @@ public class PublicUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	public boolean hasCoupon(String coupon) {
+		return coupons.stream().anyMatch(c -> c.getCoupon().equals(coupon));
 	}
 
 	public static interface Create {
