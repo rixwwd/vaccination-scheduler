@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:fragment="content" class="container-md">
+<h1>予約確認結果</h1>
+
+<th:block th:if="${reservation == null}">
+  <p>予約は存在しません。</p>
+</th:block>
+
+<th:block th:if="${reservation != null}">
+<table class="table">
+  <tr><th>場所</th><td th:text="${reservation.cell.room.name}"></td></tr>
+  <tr><th>開始日時</th><td th:text="${#temporals.format(reservation.cell.beginTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
+  <tr><th>終了日時</th><td th:text="${#temporals.format(reservation.cell.endTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
+  <tr><th>予約番号</th><td th:text="${reservation.reservationNumber}"></td></tr>
+  <tr><th>氏名</th><td th:text="${reservation.publicUser.name}"></td></tr>
+  <tr><th>ふりがな</th><td th:text="${reservation.publicUser.hurigana}"></td></tr>
+  <tr><th>生年月日</th><td th:text="${#temporals.format(reservation.publicUser.birthday, 'uuuu/MM/dd')}"></td></tr>
+  <tr><th>クーポン</th><td th:text="${reservation.coupon}"></td></tr>
+</table>
+
+</th:block>
+
+<a th:href="@{/acceptance/}" class="btn btn-secondary">再入力</a>
+</div>
+</body>
+</html>
