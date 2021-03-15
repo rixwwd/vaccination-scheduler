@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -54,9 +55,16 @@ public class Reservation {
 	@Column(name = "RESERVATION_NUMBER")
 	private String reservationNumber;
 
+	@Column(name = "ACCEPTED")
+	private boolean accepted;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
+
+	@LastModifiedDate
+	@Column(name = "UPDATED_AT")
+	private LocalDateTime updatedAt;
 
 	public UUID getId() {
 		return id;
@@ -114,12 +122,28 @@ public class Reservation {
 		this.reservationNumber = reservationNumber;
 	}
 
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 }

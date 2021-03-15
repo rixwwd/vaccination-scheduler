@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:fragment="content" class="container-md">
+<h1>接種完了</h1>
+
+<table class="table">
+  <tr><th>氏名</th><td th:text="${vaccinationHistory.publicUser.name}"></td></tr>
+  <tr><th>ふりがな</th><td th:text="${vaccinationHistory.publicUser.hurigana}"></td></tr>
+  <tr><th>生年月日</th><td th:text="${#temporals.format(vaccinationHistory.publicUser.birthday, 'uuuu/MM/dd')}"></td></tr>
+  <tr><th>接種日</th><td th:text="${#temporals.format(vaccinationHistory.vaccinatedAt, 'uuuu/MM/dd')}"></td></tr>
+</table>
+
+
+<a th:href="@{/vaccination/}" class="btn btn-secondary">次の登録</a>
+</div>
+</body>
+</html>

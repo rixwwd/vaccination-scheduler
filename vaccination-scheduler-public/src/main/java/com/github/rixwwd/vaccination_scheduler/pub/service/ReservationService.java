@@ -77,7 +77,7 @@ public class ReservationService {
 	}
 
 	public Optional<Reservation> getReservation(UUID publicUserId) {
-		return reservationRepository.findByPublicUserId(publicUserId);
+		return reservationRepository.findByPublicUserIdAndAcceptedIsFalse(publicUserId);
 	}
 
 	public void cancel(Reservation reservation) {
