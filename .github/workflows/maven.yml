@@ -24,8 +24,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Build with Maven(VACCINATION-SCHEDULER-ADMIN)
-      working-directory: $GITHUB_WORKSPACE/vaccination-scheduler-admin
+      working-directory: ./vaccination-scheduler-admin
       run: ./mvnw -B clean test --file pom.xml
     - name: Build with Maven(VACCINATION-SCHEDULER-PUBLIC)
-      working-directory: $GITHUB_WORKSPACE/vaccination-scheduler-public
+      working-directory: ./vaccination-scheduler-public
       run: ./mvnw -B clean test --file pom.xml
