@@ -15,6 +15,11 @@
 </th:block>
 
 <th:block th:if="${reservation != null}">
+
+<th:block th:if="${reservation.accepted}">
+  <div class="alert alert-danger" role="alert">受付済みです。</div>
+</th:block>
+
 <table class="table">
   <tr><th>場所</th><td th:text="${reservation.cell.room.name}"></td></tr>
   <tr><th>開始日時</th><td th:text="${#temporals.format(reservation.cell.beginTime, 'uuuu/MM/dd HH:mm')}"></td></tr>

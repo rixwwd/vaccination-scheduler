@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
@@ -30,6 +31,12 @@ public class VaccinationService {
 
 	@Transactional
 	public VaccinationHistory vaccinate(Reservation reservation) {
+
+		if (reservation.isAccepted()) {
+			// すでに受付済みが来るのはおかしい。
+			// FIXME 受付済みチェックの排他制御
+			throw new VaccinatedException();
+		}
 
 		var publicUser = reservation.getPublicUser();
 
