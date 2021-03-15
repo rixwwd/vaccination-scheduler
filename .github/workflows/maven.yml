@@ -17,8 +17,8 @@ jobs:
       with:
         java-version: 11
     - name: Build with Maven(VACCINATION-SCHEDULER-ADMIN)
-      workin-directory: ./vaccination-scheduler-admin
+      working-directory: ./vaccination-scheduler-admin
       run: ./mvnw -B clean test --file pom.xml
     - name: Build with Maven(VACCINATION-SCHEDULER-PUBLIC)
-      workin-directory: ./vaccination-scheduler-public
+      working-directory: ./vaccination-scheduler-public
       run: ./mvnw -B clean test --file pom.xml
