@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -116,5 +117,10 @@ public class CellController {
 	@ModelAttribute("rooms")
 	List<Room> rooms() {
 		return roomRepository.findAll();
+	}
+
+	@ModelAttribute("now")
+	LocalDateTime now() {
+		return LocalDateTime.now();
 	}
 }

@@ -27,7 +27,7 @@ public class MenuController {
 
 		var reservation = reservationService.getReservation(publicUser.getId());
 		var modelAndView = new ModelAndView("menu/index");
-		modelAndView.addObject("reservation", reservation.isPresent() ? reservation.get() : null);
+		modelAndView.addObject("reservation", reservation.orElse(null));
 
 		var vaccinationHistories = vaccinationHistoryRepository
 				.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());

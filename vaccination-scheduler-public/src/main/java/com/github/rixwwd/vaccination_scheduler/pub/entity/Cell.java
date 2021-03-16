@@ -53,6 +53,12 @@ public class Cell {
 	@Column(name = "CAPACITY")
 	private int capacity;
 
+	@Column(name = "RESERVATION_COUNT")
+	private int reservationCount;
+
+	@Column(name = "ACCEPTED_COUNT")
+	private int acceptedCount;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	@JsonIgnore
@@ -111,6 +117,22 @@ public class Cell {
 		this.capacity = capacity;
 	}
 
+	public int getReservationCount() {
+		return reservationCount;
+	}
+
+	public void setReservationCount(int reservationCount) {
+		this.reservationCount = reservationCount;
+	}
+
+	public int getAcceptedCount() {
+		return acceptedCount;
+	}
+
+	public void setAcceptedCount(int acceptedCount) {
+		this.acceptedCount = acceptedCount;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -127,7 +149,18 @@ public class Cell {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isEnoughCapacity(int numberOfPeople) {
-		return numberOfPeople < capacity;
+	public boolean isEnoughCapacity() {
+		return reservationCount < capacity;
 	}
+
+	public int incrementReservationCount() {
+
+		return ++this.reservationCount;
+	}
+
+	public int decrementReservationCount() {
+
+		return --this.reservationCount;
+	}
+
 }

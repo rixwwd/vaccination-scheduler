@@ -12,6 +12,8 @@ create table cells (
   begin_time timestamp not null,
   end_time timestamp not null,
   capacity integer not null,
+  reservation_count integer not null default 0,
+  accepted_count integer not null default 0,
   
   created_at timestamp not null,
   updated_at timestamp not null,

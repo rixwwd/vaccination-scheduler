@@ -10,15 +10,19 @@
 <div th:fragment="content" class="container-md">
 <h1>予約確認結果</h1>
 
+<th:block th:if="${doubleAcceptance}">
+  <div class="alert alert-danger" role="alert">受付済みです。</div>
+</th:block>
+
 <th:block th:if="${reservation == null}">
   <p>予約は存在しません。</p>
 </th:block>
 
-<th:block th:if="${reservation != null}">
-
-<th:block th:if="${reservation.accepted}">
-  <div class="alert alert-danger" role="alert">受付済みです。</div>
+<th:block th:if="${!doubleAcceptance && reservation != null}">
+  <div class="alert alert-success" role="alert">受付しました。</div>
 </th:block>
+
+<th:block th:if="${reservation != null}">
 
 <table class="table">
   <tr><th>場所</th><td th:text="${reservation.cell.room.name}"></td></tr>

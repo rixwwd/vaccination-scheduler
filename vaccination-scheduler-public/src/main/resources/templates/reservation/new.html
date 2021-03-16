@@ -34,8 +34,14 @@
 	  <label class="form-label">{{ cell.date }}</label><br>
 	  <div class="form-check">
 	  <template v-for="c in cell.cells">
-        <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input">
-        <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }}</label>
+	    <template v-if="c.reservationCount < c.capacity">
+          <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input">
+          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }} {{ c.reservationCount/c.capacity >= 0.9 ? '残り少し' : ''}}</label>
+        </template>
+        <template v-else>
+          <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input" disabled>
+          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }} 満員</label>
+        </template>
         <br>
 	  </template>
 	  </div>

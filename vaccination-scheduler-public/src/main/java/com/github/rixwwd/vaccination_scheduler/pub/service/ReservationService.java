@@ -61,10 +61,16 @@ public class ReservationService {
 		}
 
 		// 施設の収容人数確認
-		long reservationCount = reservationRepository.countByCellId(cell.getId());
-		if (!cell.isEnoughCapacity((int) reservationCount)) {
+		if (!cell.isEnoughCapacity()) {
 			throw new OverCapacityException();
 		}
+		// 整合性チェック(大丈夫だとは思うけど)
+		long reservationCount = reservationRepository.countByCellId(cell.getId());
+		if (reservationCount != cell.getReservationCount()) {
+			throw new RuntimeException("reservation count mismatch!");
+		}
+		cell.incrementReservationCount();
+		cellRepository.save(cell);
 
 		// FIXME 番号の発行アルゴリズム
 		reservation.setReservationNumber(String.format("%05d", random.nextInt(100000)));
@@ -80,7 +86,12 @@ public class ReservationService {
 		return reservationRepository.findByPublicUserIdAndAcceptedIsFalse(publicUserId);
 	}
 
+	@Transactional
 	public void cancel(Reservation reservation) {
+
+		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
+		cell.decrementReservationCount();
+		cellRepository.save(cell);
 		reservationRepository.delete(reservation);
 	}
 }

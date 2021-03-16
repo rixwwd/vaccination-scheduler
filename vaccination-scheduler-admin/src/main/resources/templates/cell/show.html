@@ -15,8 +15,11 @@
   <tr><th>場所</th><td th:text="${cell.room.name}"></td></tr>
   <tr><th>開始日時</th><td th:text="${#temporals.format(cell.beginTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
   <tr><th>終了日時</th><td th:text="${#temporals.format(cell.endTime, 'uuuu/MM/dd HH:mm')}"></td></tr>
+  <tr><th>予約数</th><td th:text="${#numbers.formatInteger(cell.reservationCount,1,'COMMA')}"></td></tr>
+  <tr><th>受付数</th><td th:text="${#numbers.formatInteger(cell.acceptedCount,1,'COMMA')}"></td></tr>
   <tr><th>人数</th><td th:text="${#numbers.formatInteger(cell.capacity,1,'COMMA')}"></td></tr>
 </table>
+<p th:text="${#temporals.format(now, 'uuuu/MM/dd HH:mm:ss') + '更新'}">2021/03/16 01:00:00更新</p>
 
 <a th:href="@{/cell/}" class="btn btn-secondary">一覧へ戻る</a>
 </div>

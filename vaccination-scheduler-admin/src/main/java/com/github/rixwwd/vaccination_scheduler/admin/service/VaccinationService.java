@@ -10,7 +10,6 @@ import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
-import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
 
 @Service
@@ -18,23 +17,19 @@ public class VaccinationService {
 
 	private VaccinationHistoryRepository vaccinationHistoryRepository;
 
-	private ReservationRepository reservationRepository;
-
 	private CouponRepository couponRepository;
 
 	public VaccinationService(VaccinationHistoryRepository vaccinationHistoryRepository,
-			ReservationRepository reservationRepository, CouponRepository couponRepository) {
+			CouponRepository couponRepository) {
 		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
-		this.reservationRepository = reservationRepository;
 		this.couponRepository = couponRepository;
 	}
 
 	@Transactional
 	public VaccinationHistory vaccinate(Reservation reservation) {
 
-		if (reservation.isAccepted()) {
-			// すでに受付済みが来るのはおかしい。
-			// FIXME 受付済みチェックの排他制御
+		if (!reservation.isAccepted()) {
+			// 受付してない人が来るのはおかしい
 			throw new VaccinatedException();
 		}
 
@@ -53,10 +48,6 @@ public class VaccinationService {
 		disabledCoupon.setUsed(true);
 		disabledCoupon.setUsedAt(LocalDateTime.now());
 		couponRepository.save(disabledCoupon);
-
-		// 予約無効化
-		reservation.setAccepted(true);
-		reservationRepository.save(reservation);
 
 		return savedHistory;
 	}
