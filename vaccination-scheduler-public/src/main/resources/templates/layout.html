@@ -17,6 +17,7 @@
 <body>
 
 <div th:if="${#authorization.expression('isAuthenticated()')}" class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <span class="navbar-text" th:text="${'ログインID: ' + #authentication.principal.loginName}">ログインID: user1</span>
   <form method="post" action="#" th:action="@{/signOut}">
     <button type="submit" class="btn btn-link">サインアウト</button>
   </form>
