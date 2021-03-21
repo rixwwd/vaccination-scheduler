@@ -56,10 +56,7 @@ class ReservationServiceTest {
 
 		var stock = new VaccineStock();
 		stock.setQuantity(1);
-		when(vaccineStockRepository.findByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(roomId, LocalDate.now()))
-				.thenReturn(Arrays.asList(stock));
-
-		when(reservationRepository.countTodayReservationByRoomId(roomId)).thenReturn(0L);
+		when(vaccineStockRepository.findInStockForWrite(roomId, LocalDate.now())).thenReturn(Arrays.asList(stock));
 
 		when(reservationRepository.countByCellId(cellId)).thenReturn(0L);
 

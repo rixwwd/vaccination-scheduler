@@ -1,7 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.pub.service;
 
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
+import com.github.rixwwd.vaccination_scheduler.pub.entity.VaccineStock;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.DuplicateRservationException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.InvalidCouponException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.OverCapacityException;
@@ -47,18 +47,19 @@ public class ReservationService {
 
 		// ワクチンと時間枠の確保
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
-		var vaccineStocks = vaccineStockRepository
-				.findByRoomIdAndGraterThanEqualExpectedDeliveryDateForWrite(cell.getRoomId(), LocalDate.now());
+		var vaccineStocks = vaccineStockRepository.findInStockForWrite(cell.getRoomId(),
+				cell.getBeginTime().toLocalDate());
 
-		// ワクチン在庫確認
-		if (vaccineStocks.isEmpty()) {
-			throw new VaccineShortageException();
-		}
-		long todayReservationCount = reservationRepository.countTodayReservationByRoomId(cell.getRoomId());
-		var stockIsEnough = vaccineStocks.stream().anyMatch(stock -> stock.isEnough(todayReservationCount));
-		if (!stockIsEnough) {
-			throw new VaccineShortageException();
-		}
+		var vaccineStock = vaccineStocks.stream().filter(VaccineStock::isEnough).sorted((a, b) -> {
+			// 配送予定日・作成日時の順でソート➙古いのから割り当てる
+			if (a.getExpectedDeliveryDate().isEqual(b.getExpectedDeliveryDate())) {
+				return a.getCreatedAt().compareTo(b.getCreatedAt());
+			}
+			return a.getExpectedDeliveryDate().compareTo(b.getExpectedDeliveryDate());
+		}).findFirst().orElseThrow(VaccineShortageException::new);
+
+		vaccineStock.incrementReservationCount();
+		vaccineStockRepository.save(vaccineStock);
 
 		// 施設の収容人数確認
 		if (!cell.isEnoughCapacity()) {
@@ -90,8 +91,23 @@ public class ReservationService {
 	public void cancel(Reservation reservation) {
 
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
+
 		cell.decrementReservationCount();
 		cellRepository.save(cell);
+
+		var vaccineStocks = vaccineStockRepository.findCancelableForWrite(cell.getRoomId(),
+				cell.getBeginTime().toLocalDate());
+		var vaccineStock = vaccineStocks.stream().sorted((a, b) -> {
+			// 配送予定日・作成日時の順の逆でソート➙新しいのからキャンセルする
+			if (b.getExpectedDeliveryDate().isEqual(a.getExpectedDeliveryDate())) {
+				return b.getCreatedAt().compareTo(a.getCreatedAt());
+			}
+			return b.getExpectedDeliveryDate().compareTo(a.getExpectedDeliveryDate());
+		}).findFirst().orElseThrow(VaccineShortageException::new);
+
+		vaccineStock.decrementReservationCount();
+		vaccineStockRepository.save(vaccineStock);
+
 		reservationRepository.delete(reservation);
 	}
 }

@@ -67,6 +67,8 @@ create table vaccine_stocks (
   expected_delivery_date date,
   quantity integer not null,
   room_id uuid not null,
+  reservation_count integer not null default 0,
+  vaccinated_count integer not null default 0,
   
   created_at timestamp not null,
   updated_at timestamp not null

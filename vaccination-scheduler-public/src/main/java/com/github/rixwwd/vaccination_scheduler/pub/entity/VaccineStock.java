@@ -42,6 +42,12 @@ public class VaccineStock {
 	@JoinColumn(name = "ROOM_ID", insertable = false, updatable = false)
 	private Room room;
 
+	@Column(name = "RESERVATION_COUNT")
+	private int reservationCount;
+
+	@Column(name = "VACCINATED_COUNT")
+	private int vaccinatedCount;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
@@ -90,6 +96,22 @@ public class VaccineStock {
 		this.room = room;
 	}
 
+	public int getReservationCount() {
+		return reservationCount;
+	}
+
+	public void setReservationCount(int reservationCount) {
+		this.reservationCount = reservationCount;
+	}
+
+	public int getVaccinatedCount() {
+		return vaccinatedCount;
+	}
+
+	public void setVaccinatedCount(int vaccinatedCount) {
+		this.vaccinatedCount = vaccinatedCount;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -106,7 +128,18 @@ public class VaccineStock {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isEnough(long todayReservationCount) {
-		return todayReservationCount < quantity;
+	public boolean isEnough() {
+		return quantity > reservationCount;
 	}
+
+	public int incrementReservationCount() {
+
+		return ++this.reservationCount;
+	}
+
+	public int decrementReservationCount() {
+
+		return --this.reservationCount;
+	}
+
 }

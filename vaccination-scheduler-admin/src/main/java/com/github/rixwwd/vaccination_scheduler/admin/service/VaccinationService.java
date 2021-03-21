@@ -11,6 +11,7 @@ import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
+import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccineStockRepository;
 
 @Service
 public class VaccinationService {
@@ -19,10 +20,13 @@ public class VaccinationService {
 
 	private CouponRepository couponRepository;
 
+	private VaccineStockRepository vaccineStockRepository;
+
 	public VaccinationService(VaccinationHistoryRepository vaccinationHistoryRepository,
-			CouponRepository couponRepository) {
+			CouponRepository couponRepository, VaccineStockRepository vaccineStockRepository) {
 		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
 		this.couponRepository = couponRepository;
+		this.vaccineStockRepository = vaccineStockRepository;
 	}
 
 	@Transactional
@@ -48,6 +52,21 @@ public class VaccinationService {
 		disabledCoupon.setUsed(true);
 		disabledCoupon.setUsedAt(LocalDateTime.now());
 		couponRepository.save(disabledCoupon);
+
+		// ワクチン在庫
+		var vaccineStocks = vaccineStockRepository.findUnusedStockForWrite(reservation.getCell().getRoomId(),
+				reservation.getCell().getBeginTime().toLocalDate());
+
+		var vaccineStock = vaccineStocks.stream().sorted((a, b) -> {
+			// 配送予定日・作成日時の順でソート➙古いのから割り当てる
+			if (a.getExpectedDeliveryDate().isEqual(b.getExpectedDeliveryDate())) {
+				return a.getCreatedAt().compareTo(b.getCreatedAt());
+			}
+			return a.getExpectedDeliveryDate().compareTo(b.getExpectedDeliveryDate());
+		}).findFirst().orElseThrow();
+
+		vaccineStock.incrementVaccinatedCount();
+		vaccineStockRepository.save(vaccineStock);
 
 		return savedHistory;
 	}
