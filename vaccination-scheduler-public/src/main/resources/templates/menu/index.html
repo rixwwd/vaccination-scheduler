@@ -11,6 +11,11 @@
 <div th:fragment="content" class="container-md">
   <h1>メニュー</h1>
 
+  <div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(successMessage)}">
+    [[${successMessage}]]
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
   <div class="row">
   	
     <div class="col-md-6">

@@ -16,12 +16,18 @@
 </head>
 <body>
 
-<div th:if="${#authorization.expression('isAuthenticated()')}" class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <span class="navbar-text" th:text="${'ログインID: ' + #authentication.principal.loginName}">ログインID: user1</span>
-  <form method="post" action="#" th:action="@{/signOut}">
-    <button type="submit" class="btn btn-link">サインアウト</button>
-  </form>
-</div>
+<th:block th:if="${#authorization.expression('isAuthenticated()')}">
+<ul class="nav nav-pills justify-content-end">
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" th:text="${#authentication.principal.loginName}">user1</a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="#" th:href="@{/password/edit}">パスワード変更</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="#" th:href="@{/signOut}" data-method="post">サインアウト</a></li>
+    </ul>
+  </li>
+</ul>
+</th:block>
 
 <div th:replace="${content}"></div>
 <script type="text/javascript" th:src="@{/js/application.js}"></script>
