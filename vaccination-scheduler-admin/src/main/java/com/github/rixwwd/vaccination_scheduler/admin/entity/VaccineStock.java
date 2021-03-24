@@ -31,6 +31,7 @@ public class VaccineStock {
 	@GeneratedValue(generator = "uuid")
 	private UUID id;
 
+	@NotNull
 	@DateTimeFormat(pattern = "uuuu-MM-dd")
 	@Column(name = "EXPECTED_DELIVERY_DATE")
 	private LocalDate expectedDeliveryDate;

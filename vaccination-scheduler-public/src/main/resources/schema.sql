@@ -64,7 +64,7 @@ create table reservations (
 
 create table vaccine_stocks (
   id uuid primary key,
-  expected_delivery_date date,
+  expected_delivery_date date not null,
   quantity integer not null,
   room_id uuid not null,
   reservation_count integer not null default 0,
