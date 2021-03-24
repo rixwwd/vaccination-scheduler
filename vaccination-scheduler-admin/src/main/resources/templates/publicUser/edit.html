@@ -15,64 +15,64 @@
 
 　　<div class="mb-3">
 	<label for="plainPassword" class="form-label">パスワード</label>
-	<input type="password" th:field="*{plainPassword}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="password" th:field="*{plainPassword}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('plainPassword')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="plainPasswordConfirmation" class="form-label">パスワード(確認)</label>
-	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="password" th:field="*{plainPasswordConfirmation}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('plainPasswordConfirmation')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="name" class="form-label">氏名</label>
-	<input type="text" th:field="*{name}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{name}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('name')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="hurigana" class="form-label">ふりがな</label>
-	<input type="text" th:field="*{hurigana}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{hurigana}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('hurigana')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="birthday" class="form-label">誕生日</label>
-	<input type="text" th:field="*{birthday}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{birthday}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('birthday')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="address" class="form-label">住所</label>
-	<input type="text" th:field="*{address}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{address}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('address')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="telephoneNumber" class="form-label">電話</label>
-	<input type="text" th:field="*{telephoneNumber}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{telephoneNumber}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('telephoneNumber')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="email" class="form-label">メール</label>
-	<input type="text" th:field="*{email}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{email}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('email')}" th:text="${err}">
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="sms" class="form-label">SMS</label>
-	<input type="text" th:field="*{sms}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{sms}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('sms')}" th:text="${err}">
 	</ul>
   </div>

@@ -14,24 +14,24 @@
 
   <div class="mb-3">
 	<label for="expectedDeliveryDate" class="form-label">配送予定日</label>
-	<input type="text" th:field="*{expectedDeliveryDate}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{expectedDeliveryDate}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('expectedDeliveryDate')}" th:text="${err}" />
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="quantity" class="form-label">数量</label>
-	<input type="number" min="1" th:field="*{quantity}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="number" min="1" th:field="*{quantity}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('quantity')}" th:text="${err}" />
 	</ul>
   </div>
   <div class="mb-3">
 	<label for="roomId" class="form-label">場所</label>
-	<select th:field="*{roomId}" th:errorclass="field-error" class="form-select">
+	<select th:field="*{roomId}" th:errorclass="is-invalid" class="form-select">
 		<option th:each="room : ${rooms}" th:value="${room.id}" th:text="${room.name}">Room1</option>
 	</select>
-	<ul>
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('roomId')}" th:text="${err}" />
 	</ul>
   </div>

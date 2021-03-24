@@ -14,8 +14,8 @@
 
   <div class="mb-3">
 	<label for="reservationNumber" class="form-label">予約番号</label>
-	<input type="text" th:field="*{reservationNumber}" th:errorclass="field-error" class="form-control">
-	<ul>
+	<input type="text" th:field="*{reservationNumber}" th:errorclass="is-invalid" class="form-control">
+	<ul class="list-unstyled invalid-feedback">
 		<li th:each="err : ${#fields.errors('reservationNumber')}" th:text="${err}">
 	</ul>
   </div>
