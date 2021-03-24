@@ -8,9 +8,14 @@
 </head>
 <body>
 <div th:fragment="content" class="container-md">
-	<h1>メニュー</h1>
-	
-	<p>メニューから操作を選択してください。</p>
+  <h1>メニュー</h1>
+
+  <div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(successMessage)}">
+    <p th:text="${successMessage}">成功しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  
+  <p>メニューから操作を選択してください。</p>
 </div>
 </body>
 </html>

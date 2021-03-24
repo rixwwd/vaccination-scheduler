@@ -40,7 +40,7 @@ public class AdminUser implements UserDetails {
 	private UUID id;
 
 	@NotBlank
-	@Pattern(regexp = "[a-z0-9_]{4, 255}")
+	@Pattern(regexp = "[a-z0-9_]{4,255}")
 	@Column(name = "USERNAME")
 	private String username;
 
