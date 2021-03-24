@@ -40,6 +40,7 @@ public class Cell {
 	@JoinColumn(name = "ROOM_ID", insertable = false, updatable = false)
 	private Room room;
 
+	@NotNull
 	@DateTimeFormat(pattern = "uuuu-MM-dd HH:mm")
 	@Column(name = "BEGIN_TIME")
 	private LocalDateTime beginTime;
