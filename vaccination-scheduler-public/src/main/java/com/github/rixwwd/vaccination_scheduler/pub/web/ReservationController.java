@@ -1,6 +1,7 @@
 package com.github.rixwwd.vaccination_scheduler.pub.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,11 @@ import com.github.rixwwd.vaccination_scheduler.pub.entity.Cell;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Room;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.DuplicateRservationException;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.InvalidCouponException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.NotFoundException;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.OverCapacityException;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineShortageException;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.RoomRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.service.ReservationService;
@@ -70,7 +75,22 @@ public class ReservationController {
 		}
 
 		reservation.setPublicUserId(publicUser.getId());
-		reservationService.reserve(reservation, publicUser);
+
+		String errorMessage = null;
+		try {
+			reservationService.reserve(reservation, publicUser);
+		} catch (InvalidCouponException e) {
+			errorMessage = "クーポンが不正です";
+		} catch (VaccineShortageException e) {
+			errorMessage = "ワクチンが不足しています";
+		} catch (OverCapacityException e) {
+			errorMessage = "定員を超えています";
+		} catch (DuplicateRservationException e) {
+			errorMessage = "予約が重複しています";
+		}
+		if (errorMessage != null) {
+			return new ModelAndView("reservation/new", Map.of("errorMessage", errorMessage));
+		}
 
 		return new ModelAndView("redirect:/reservation/");
 	}

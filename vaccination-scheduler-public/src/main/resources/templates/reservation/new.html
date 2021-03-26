@@ -12,6 +12,11 @@
 <div th:fragment="content" class="container-md">
 <h1>予約</h1>
 
+  <div class="alert alert-danger alert-dismissible" role="alert" th:if="${!#strings.isEmpty(errorMessage)}">
+    <p th:text="${errorMessage}">エラーが発生しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
 <form th:action="@{/reservation/confirm}" th:object="${reservation}" method="post">
 
   <div class="mb-3">
