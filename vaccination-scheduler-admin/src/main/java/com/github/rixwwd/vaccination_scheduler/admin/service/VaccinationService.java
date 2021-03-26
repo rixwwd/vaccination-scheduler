@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
+import com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
@@ -30,7 +31,7 @@ public class VaccinationService {
 	}
 
 	@Transactional
-	public VaccinationHistory vaccinate(Reservation reservation) {
+	public VaccinationHistory vaccinate(Reservation reservation, Vaccine vaccine) {
 
 		if (!reservation.isAccepted()) {
 			// 受付してない人が来るのはおかしい
@@ -44,6 +45,7 @@ public class VaccinationService {
 		vaccinationHistory.setPublicUserId(publicUser.getId());
 		vaccinationHistory.setPublicUser(reservation.getPublicUser());
 		vaccinationHistory.setVaccinatedAt(LocalDate.now());
+		vaccinationHistory.setVaccine(vaccine);
 		var savedHistory = vaccinationHistoryRepository.save(vaccinationHistory);
 
 		// クーポン無効化

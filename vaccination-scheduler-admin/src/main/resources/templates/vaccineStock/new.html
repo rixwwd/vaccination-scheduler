@@ -36,6 +36,16 @@
 	</ul>
   </div>
   <div class="mb-3">
+	<label for="roomId" class="form-label">ワクチンメーカー</label>
+	<select th:field="*{vaccine}" th:errorclass="is-invalid" class="form-select">
+		<option value=""></option>
+		<option th:each="v : ${T(com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine).values()}" th:value="${v.name}" th:text="${v.makerName}">ワクチンメーカーA</option>
+	</select>
+	<ul class="list-unstyled invalid-feedback">
+		<li th:each="err : ${#fields.errors('vaccine')}" th:text="${err}" />
+	</ul>
+  </div>
+  <div class="mb-3">
 	<button type="submit" class="btn btn-primary">追加</button>
   </div>
 </form>

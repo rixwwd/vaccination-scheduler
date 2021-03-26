@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -47,6 +49,11 @@ public class VaccineStock {
 
 	@Column(name = "VACCINATED_COUNT")
 	private int vaccinatedCount;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "VACCINE")
+	private Vaccine vaccine;
 
 	@CreatedDate
 	@Column(name = "CREATED_AT")
@@ -110,6 +117,14 @@ public class VaccineStock {
 
 	public void setVaccinatedCount(int vaccinatedCount) {
 		this.vaccinatedCount = vaccinatedCount;
+	}
+
+	public Vaccine getVaccine() {
+		return vaccine;
+	}
+
+	public void setVaccine(Vaccine vaccine) {
+		this.vaccine = vaccine;
 	}
 
 	public LocalDateTime getCreatedAt() {

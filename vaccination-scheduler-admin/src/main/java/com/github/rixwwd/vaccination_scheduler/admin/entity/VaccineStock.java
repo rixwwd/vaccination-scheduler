@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -53,6 +55,11 @@ public class VaccineStock {
 
 	@Column(name = "VACCINATED_COUNT")
 	private int vaccinatedCount;
+
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "VACCINE")
+	private Vaccine vaccine;
 
 	@CreatedDate
 	@Column(name = "CREATED_AT")
@@ -116,6 +123,14 @@ public class VaccineStock {
 
 	public void setVaccinatedCount(int vaccinatedCount) {
 		this.vaccinatedCount = vaccinatedCount;
+	}
+
+	public Vaccine getVaccine() {
+		return vaccine;
+	}
+
+	public void setVaccine(Vaccine vaccine) {
+		this.vaccine = vaccine;
 	}
 
 	public LocalDateTime getCreatedAt() {

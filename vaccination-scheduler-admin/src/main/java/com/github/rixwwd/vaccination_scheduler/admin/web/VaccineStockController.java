@@ -94,6 +94,7 @@ public class VaccineStockController {
 		updatedVaccineStock.setExpectedDeliveryDate(vaccineStock.getExpectedDeliveryDate());
 		updatedVaccineStock.setQuantity(vaccineStock.getQuantity());
 		updatedVaccineStock.setRoomId(vaccineStock.getRoomId());
+		updatedVaccineStock.setVaccine(vaccineStock.getVaccine());
 
 		var newVaccineStock = vaccineStockRepository.save(updatedVaccineStock);
 
@@ -111,7 +112,7 @@ public class VaccineStockController {
 
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
-		binder.setAllowedFields("expectedDeliveryDate", "quantity", "roomId");
+		binder.setAllowedFields("expectedDeliveryDate", "quantity", "roomId", "vaccine");
 	}
 
 	@ModelAttribute("rooms")

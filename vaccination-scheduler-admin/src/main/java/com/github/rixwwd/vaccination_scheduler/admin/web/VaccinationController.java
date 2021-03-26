@@ -43,7 +43,7 @@ public class VaccinationController {
 			return new ModelAndView("vaccination/new");
 		}
 
-		var vaccinationHistory = vaccinateionService.vaccinate(reservation.get());
+		var vaccinationHistory = vaccinateionService.vaccinate(reservation.get(), form.getVaccine());
 
 		var modelAndView = new ModelAndView("vaccination/result");
 		modelAndView.addObject("vaccinationHistory", vaccinationHistory);

@@ -15,6 +15,9 @@
   <tr><th>配送予定日</th><td th:text="${#temporals.format(vaccineStock.expectedDeliveryDate, 'uuuu/MM/dd')}"></td></tr>
   <tr><th>数量</th><td th:text="${#numbers.formatInteger(vaccineStock.quantity,1,'COMMA')}"></td></tr>
   <tr><th>場所</th><td th:text="${vaccineStock.room.name}"></td></tr>
+  <tr><th>予約数</th><td th:text="${vaccineStock.reservationCount}"></td></tr>
+  <tr><th>接種数</th><td th:text="${vaccineStock.vaccinatedCount}"></td></tr>
+  <tr><th>ワクチンメーカー</th><td th:text="${vaccineStock.vaccine.makerName}"></td></tr>
 </table>
 
 <a th:href="@{/vaccineStock/}" class="btn btn-secondary">一覧へ戻る</a>

@@ -49,7 +49,7 @@
           <th:block th:if="${!#lists.isEmpty(vaccinationHistories)}">
             <p class="card-text">
               <ul>
-                <li th:each="history,stat : ${vaccinationHistories}">[[${stat.count + '回目 ' + #temporals.format(history.vaccinatedAt, 'uuuu/MM/dd')}]]</li>
+                <li th:each="history,stat : ${vaccinationHistories}" th:text="${stat.count + '回目 ' + #temporals.format(history.vaccinatedAt, 'uuuu/MM/dd') + ' ' + history.vaccine.makerName}"></li>
               </ul>
             </p>
           </th:block>

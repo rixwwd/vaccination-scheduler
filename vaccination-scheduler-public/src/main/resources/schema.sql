@@ -69,6 +69,7 @@ create table vaccine_stocks (
   room_id uuid not null,
   reservation_count integer not null default 0,
   vaccinated_count integer not null default 0,
+  vaccine varchar not null,
   
   created_at timestamp not null,
   updated_at timestamp not null
@@ -80,6 +81,7 @@ create table vaccination_histories (
   id uuid primary key,
   public_user_id uuid not null,
   vaccinated_at date not null,
+  vaccine varchar not null,
   
   created_at timestamp not null
 );

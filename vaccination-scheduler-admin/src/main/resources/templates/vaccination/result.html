@@ -15,6 +15,7 @@
   <tr><th>ふりがな</th><td th:text="${vaccinationHistory.publicUser.hurigana}"></td></tr>
   <tr><th>生年月日</th><td th:text="${#temporals.format(vaccinationHistory.publicUser.birthday, 'uuuu/MM/dd')}"></td></tr>
   <tr><th>接種日</th><td th:text="${#temporals.format(vaccinationHistory.vaccinatedAt, 'uuuu/MM/dd')}"></td></tr>
+  <tr><th>ワクチンメーカー</th><td th:text="${vaccinationHistory.vaccine.makerName}"></td></tr>
 </table>
 
 
