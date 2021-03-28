@@ -27,7 +27,6 @@ public interface CellRepository extends JpaRepository<Cell, UUID> {
 
 	List<Cell> findByBeginTimeAfter(LocalDateTime time);
 
-	@Query("SELECT c FROM Cell c LEFT JOIN Room r ON c.roomId = r.id WHERE r.id = :roomId AND r.vaccine = :vaccine AND c.beginTime > :time")
-	List<Cell> findByRoomIdAndVaccineAndBeginTimeAfter(@Param("roomId") UUID roomId, @Param("vaccine") Vaccine vaccine,
-			@Param("time") LocalDateTime time);
+	@Query("SELECT c FROM Cell c LEFT JOIN Room r ON c.roomId = r.id WHERE r.vaccine = :vaccine AND c.beginTime > :time")
+	List<Cell> findByVaccineAndBeginTimeAfter(@Param("vaccine") Vaccine vaccine, @Param("time") LocalDateTime time);
 }

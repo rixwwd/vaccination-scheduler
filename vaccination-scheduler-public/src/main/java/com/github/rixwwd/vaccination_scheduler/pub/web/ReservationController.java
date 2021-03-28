@@ -3,7 +3,6 @@ package com.github.rixwwd.vaccination_scheduler.pub.web;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -165,10 +164,7 @@ public class ReservationController {
 			return cellRepository.findByBeginTimeAfter(now);
 		}
 		var firstTime = histories.get(0);
-		var dosesDay = firstTime.getVaccinatedAt().plus(firstTime.getVaccine().getDosesInterval());
-		return cellRepository
-				.findByRoomIdAndVaccineAndBeginTimeAfter(firstTime.getRoomId(), firstTime.getVaccine(), now).stream()
-				.filter(c -> !c.getBeginTime().toLocalDate().isBefore(dosesDay))
-				.collect(Collectors.toUnmodifiableList());
+		var dosesDay = firstTime.getVaccinatedAt().plusDays(firstTime.getVaccine().getDosesInterval().toDays());
+		return cellRepository.findByVaccineAndBeginTimeAfter(firstTime.getVaccine(), dosesDay.atStartOfDay());
 	}
 }
