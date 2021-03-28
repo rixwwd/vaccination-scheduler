@@ -4,6 +4,8 @@ create table cells (
   begin_time timestamp not null,
   end_time timestamp not null,
   capacity integer not null,
+  accepted_count integer not null,
+  reservation_count integer not null,
   
   created_at timestamp not null,
   updated_at timestamp not null,

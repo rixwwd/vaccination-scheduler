@@ -2,7 +2,6 @@ create table public_users (
   id uuid primary key,
   login_name varchar not null,
   password varchar not null,
-  coupon varchar not null,
   name varchar not null,
   hurigana varchar,
   birthday date,
@@ -15,5 +14,4 @@ create table public_users (
   updated_at timestamp not null
 );
 
-create unique index public_users_coupon on public_users (coupon);
 create unique index public_users_login_name on public_users(login_name);
