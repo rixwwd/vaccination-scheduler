@@ -6,6 +6,8 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -32,6 +34,10 @@ public class Room {
 	@Column(name = "NAME")
 	private String name;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "VACCINE")
+	private Vaccine vaccine;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
@@ -54,6 +60,14 @@ public class Room {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Vaccine getVaccine() {
+		return vaccine;
+	}
+
+	public void setVaccine(Vaccine vaccine) {
+		this.vaccine = vaccine;
 	}
 
 	public LocalDateTime getCreatedAt() {

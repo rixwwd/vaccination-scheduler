@@ -1,6 +1,7 @@
 package com.github.rixwwd.vaccination_scheduler.pub.service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,9 +16,12 @@ import com.github.rixwwd.vaccination_scheduler.pub.exception.DuplicateRservation
 import com.github.rixwwd.vaccination_scheduler.pub.exception.InvalidCouponException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.OverCapacityException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.ReserveFailureException;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccinationTooEarlyException;
+import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineShortageException;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.ReservationRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccineStockRepository;
 
 @Service
@@ -31,11 +35,14 @@ public class ReservationService {
 
 	private VaccineStockRepository vaccineStockRepository;
 
+	private VaccinationHistoryRepository vaccinationHistoryRepository;
+
 	public ReservationService(ReservationRepository reservationRepository, CellRepository cellRepository,
-			VaccineStockRepository vaccineStockRepository) {
+			VaccineStockRepository vaccineStockRepository, VaccinationHistoryRepository vaccinationHistoryRepository) {
 		this.reservationRepository = reservationRepository;
 		this.cellRepository = cellRepository;
 		this.vaccineStockRepository = vaccineStockRepository;
+		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
 	}
 
 	@Transactional
@@ -49,6 +56,27 @@ public class ReservationService {
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
 		var vaccineStocks = vaccineStockRepository.findInStockForWrite(cell.getRoomId(),
 				cell.getBeginTime().toLocalDate());
+
+		if (cell.getBeginTime().isBefore(LocalDateTime.now())) {
+			throw new VaccinationTimePastException();
+		}
+
+		// １回目を接種しているならその時と整合性を確認する。
+		var history = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
+		if (!history.isEmpty()) {
+			var firstTime = history.get(0);
+
+			// ワクチンの種類
+			if (cell.getRoom().getVaccine() != firstTime.getVaccine()) {
+				throw new VaccineMismatchException();
+			}
+
+			// 接種間隔
+			if (cell.getBeginTime().toLocalDate().isBefore(firstTime.getVaccinatedAt())) {
+				throw new VaccinationTooEarlyException();
+			}
+
+		}
 
 		var vaccineStock = vaccineStocks.stream().filter(VaccineStock::isEnough).sorted((a, b) -> {
 			// 配送予定日・作成日時の順でソート➙古いのから割り当てる

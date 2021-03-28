@@ -1,4 +1,4 @@
-insert into rooms (id, name, created_at, updated_at) values ('107c201a-790c-4fcf-bd86-ad60d5f15d39', '市役所 会議室', current_timestamp, current_timestamp);
+insert into rooms (id, name, created_at, updated_at) values ('107c201a-790c-4fcf-bd86-ad60d5f15d39', '市役所 会議室', 'PFIZER', current_timestamp, current_timestamp);
 
 insert into cells (id, room_id, begin_time, end_time, capacity, created_at, updated_at) values 
 ('0030ef90-cab9-408f-bb4a-83967fb1555e', '107c201a-790c-4fcf-bd86-ad60d5f15d39', '2021-04-01 10:00:00', '2021-04-01 11:00:00', 10, current_timestamp, current_timestamp),

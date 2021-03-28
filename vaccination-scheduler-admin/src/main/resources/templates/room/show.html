@@ -13,6 +13,7 @@
 
 <table class="table">
   <tr><th>名前</th><td th:text="${room.name}"></td></tr>
+  <tr><th>取扱ワクチン</th><td th:text="${room.vaccine.makerName}"></td></tr>
 </table>
 
 <a th:href="@{/room/}" class="btn btn-secondary">一覧へ戻る</a>

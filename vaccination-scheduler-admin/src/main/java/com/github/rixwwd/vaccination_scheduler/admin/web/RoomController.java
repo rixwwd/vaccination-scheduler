@@ -101,7 +101,7 @@ public class RoomController {
 
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
-		binder.setAllowedFields("name");
+		binder.setAllowedFields("name", "vaccine");
 	}
 
 }

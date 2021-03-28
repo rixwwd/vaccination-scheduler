@@ -38,6 +38,9 @@ public class VaccinationHistory {
 	@Column(name = "VACCINE")
 	private Vaccine vaccine;
 
+	@Column(name = "ROOM_ID")
+	private UUID roomId;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
@@ -80,6 +83,14 @@ public class VaccinationHistory {
 
 	public void setVaccine(Vaccine vaccine) {
 		this.vaccine = vaccine;
+	}
+
+	public UUID getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(UUID roomId) {
+		this.roomId = roomId;
 	}
 
 	public LocalDateTime getCreatedAt() {
