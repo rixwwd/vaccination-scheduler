@@ -58,7 +58,7 @@
 			</tr>
 		</tbody>
 	</table>
-	<p th:text="${#temporals.format(now, 'uuuu/MM/dd HH:mm:ss') + '更新'}">2021/03/16 01:00:00更新</p>
+	<p th:text="${#temporals.format(#temporals.createNow(), 'uuuu/MM/dd HH:mm:ss') + '更新'}">2021/03/16 01:00:00更新</p>
 </div>
 </body>
 </html>
