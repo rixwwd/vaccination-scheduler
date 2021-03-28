@@ -10,17 +10,14 @@
 <div th:fragment="content" class="container-md">
 <h1>予約確認結果</h1>
 
-<th:block th:if="${doubleAcceptance}">
-  <div class="alert alert-danger" role="alert">受付済みです。</div>
-</th:block>
-
-<th:block th:if="${reservation == null}">
-  <p>予約は存在しません。</p>
-</th:block>
-
-<th:block th:if="${!doubleAcceptance && reservation != null}">
-  <div class="alert alert-success" role="alert">受付しました。</div>
-</th:block>
+  <div class="alert alert-danger alert-dismissible" role="alert" th:if="${!#strings.isEmpty(errorMessage)}">
+    <p th:text="${errorMessage}">エラーが発生しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(successMessage)}">
+    <p th:text="${successMessage}">成功しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 
 <th:block th:if="${reservation != null}">
 

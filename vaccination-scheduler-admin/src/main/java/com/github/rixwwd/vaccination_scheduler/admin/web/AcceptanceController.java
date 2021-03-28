@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.AcceptanceNotStartedException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.DoubleAcceptanceException;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.ReservationNotFoundException;
 import com.github.rixwwd.vaccination_scheduler.admin.service.AcceptanceService;
 
 @Controller
@@ -37,17 +39,25 @@ public class AcceptanceController {
 		}
 
 		Reservation reservation = null;
-		boolean doubleAcceptance = false;
+		String errorMessage = null;
+		String successMessage = null;
 		try {
 			reservation = acceptanceService.accept(form.getReservationNumber());
+			successMessage = "受け付けました。";
+		} catch (ReservationNotFoundException e) {
+			errorMessage = "予約は存在しません。";
 		} catch (DoubleAcceptanceException e) {
-			doubleAcceptance = true;
-			reservation = acceptanceService.findByReservationNumber(form.getReservationNumber());
+			errorMessage = "受付済みです。";
+			reservation = e.getReservation();
+		} catch (AcceptanceNotStartedException e) {
+			errorMessage = "受付は開始していません。";
+			reservation = e.getReservation();
 		}
 
 		var modelAndView = new ModelAndView("acceptance/result");
 		modelAndView.addObject("reservation", reservation);
-		modelAndView.addObject("doubleAcceptance", doubleAcceptance);
+		modelAndView.addObject("errorMessage", errorMessage);
+		modelAndView.addObject("successMessage", successMessage);
 		return modelAndView;
 
 	}
