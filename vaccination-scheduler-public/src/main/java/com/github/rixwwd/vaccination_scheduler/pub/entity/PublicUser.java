@@ -251,7 +251,7 @@ public class PublicUser implements UserDetails {
 	}
 
 	public boolean hasCoupon(String coupon) {
-		return coupons.stream().anyMatch(c -> c.getCoupon().equals(coupon));
+		return coupons.stream().anyMatch(c -> c.getCoupon().equals(coupon) && c.isUsed());
 	}
 
 	public static interface Create {
