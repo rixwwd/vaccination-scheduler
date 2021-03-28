@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.NoAcceptanceException;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.service.VaccinationService;
 
@@ -43,10 +46,19 @@ public class VaccinationController {
 			return new ModelAndView("vaccination/new");
 		}
 
-		var vaccinationHistory = vaccinateionService.vaccinate(reservation.get(), form.getVaccine());
+		VaccinationHistory vaccinationHistory = null;
+		String errorMessage = null;
+		try {
+			vaccinationHistory = vaccinateionService.vaccinate(reservation.get(), form.getVaccine());
+		} catch (NoAcceptanceException e) {
+			errorMessage = "受付が済んでいません。";
+		} catch (VaccineMismatchException e) {
+			errorMessage = "前回接種したワクチンと異なるワクチンです。";
+		}
 
 		var modelAndView = new ModelAndView("vaccination/result");
 		modelAndView.addObject("vaccinationHistory", vaccinationHistory);
+		modelAndView.addObject("errorMessage", errorMessage);
 		return modelAndView;
 	}
 }

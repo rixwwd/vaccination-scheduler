@@ -10,6 +10,16 @@
 <div th:fragment="content" class="container-md">
 <h1>接種完了</h1>
 
+  <div class="alert alert-danger alert-dismissible" role="alert" th:if="${!#strings.isEmpty(errorMessage)}">
+    <p th:text="${errorMessage}">エラーが発生しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <div class="alert alert-success alert-dismissible" role="alert" th:if="${!#strings.isEmpty(successMessage)}">
+    <p th:text="${successMessage}">成功しました。</p>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  
+<th:block th:if="${vaccinationHistory != null}">
 <table class="table">
   <tr><th>氏名</th><td th:text="${vaccinationHistory.publicUser.name}"></td></tr>
   <tr><th>ふりがな</th><td th:text="${vaccinationHistory.publicUser.hurigana}"></td></tr>
@@ -17,7 +27,7 @@
   <tr><th>接種日</th><td th:text="${#temporals.format(vaccinationHistory.vaccinatedAt, 'uuuu/MM/dd')}"></td></tr>
   <tr><th>ワクチンメーカー</th><td th:text="${vaccinationHistory.vaccine.makerName}"></td></tr>
 </table>
-
+</th:block>
 
 <a th:href="@{/vaccination/}" class="btn btn-secondary">次の登録</a>
 </div>

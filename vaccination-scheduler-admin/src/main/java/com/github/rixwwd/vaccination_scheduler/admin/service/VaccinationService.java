@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.NoAcceptanceException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccineStockRepository;
@@ -31,14 +33,23 @@ public class VaccinationService {
 	}
 
 	@Transactional
-	public VaccinationHistory vaccinate(Reservation reservation, Vaccine vaccine) {
+	public VaccinationHistory vaccinate(Reservation reservation, Vaccine vaccine) throws VaccinatedException {
 
 		if (!reservation.isAccepted()) {
 			// 受付してない人が来るのはおかしい
-			throw new VaccinatedException();
+			throw new NoAcceptanceException();
 		}
 
 		var publicUser = reservation.getPublicUser();
+
+		var histories = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
+		if (!histories.isEmpty()) {
+			var history = histories.get(0);
+
+			if (history.getVaccine() != vaccine) {
+				throw new VaccineMismatchException();
+			}
+		}
 
 		// ワクチン接種の履歴を記録
 		var vaccinationHistory = new VaccinationHistory();
