@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,22 +25,26 @@ import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.VaccineStock;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.ReservationRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccineStockRepository;
 
 @SpringBootTest
 class ReservationServiceTest {
 
 	@Autowired
-	ReservationService reservationService;
+	private ReservationService reservationService;
 
 	@MockBean
-	CellRepository cellRepository;
+	private CellRepository cellRepository;
 
 	@MockBean
-	ReservationRepository reservationRepository;
+	private ReservationRepository reservationRepository;
 
 	@MockBean
-	VaccineStockRepository vaccineStockRepository;
+	private VaccineStockRepository vaccineStockRepository;
+
+	@MockBean
+	private VaccinationHistoryRepository vaccinationHistoryRepository;
 
 	@Test
 	void testReserve() {
@@ -47,10 +52,16 @@ class ReservationServiceTest {
 		var cellId = UUID.fromString("3b730ff1-cbda-4eeb-83a1-e61ab9c071a7");
 		var roomId = UUID.fromString("c182a523-1256-4621-b3d8-81d96d16f237");
 
-		var cell = new Cell();
+		var cell = new Cell() {
+			@Override
+			public boolean isStarted() {
+				return false;
+			}
+		};
 		cell.setId(cellId);
 		cell.setCapacity(1);
 		cell.setRoomId(roomId);
+		cell.setBeginTime(LocalDateTime.now());
 
 		when(cellRepository.findByIdForWrite(Mockito.any(UUID.class))).thenReturn(Optional.of(cell));
 
@@ -75,6 +86,7 @@ class ReservationServiceTest {
 		var publicUser = new PublicUser();
 		var coupon = new Coupon();
 		coupon.setCoupon("12345");
+		coupon.setUsed(false);
 		publicUser.setCoupons(List.of(coupon));
 		var actualReservation = reservationService.reserve(reservation, publicUser);
 

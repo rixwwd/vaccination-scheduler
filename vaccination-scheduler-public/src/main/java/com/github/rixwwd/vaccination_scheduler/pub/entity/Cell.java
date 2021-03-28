@@ -164,4 +164,7 @@ public class Cell {
 		return --this.reservationCount;
 	}
 
+	public boolean isStarted() {
+		return beginTime.isBefore(LocalDateTime.now());
+	}
 }

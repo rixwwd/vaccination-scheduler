@@ -1,7 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.pub.service;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.rixwwd.vaccination_scheduler.pub.entity.Cell;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.VaccineStock;
@@ -57,26 +57,11 @@ public class ReservationService {
 		var vaccineStocks = vaccineStockRepository.findInStockForWrite(cell.getRoomId(),
 				cell.getBeginTime().toLocalDate());
 
-		if (cell.getBeginTime().isBefore(LocalDateTime.now())) {
+		if (cell.isStarted()) {
 			throw new VaccinationTimePastException();
 		}
 
-		// １回目を接種しているならその時と整合性を確認する。
-		var history = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
-		if (!history.isEmpty()) {
-			var firstTime = history.get(0);
-
-			// ワクチンの種類
-			if (cell.getRoom().getVaccine() != firstTime.getVaccine()) {
-				throw new VaccineMismatchException();
-			}
-
-			// 接種間隔
-			if (cell.getBeginTime().toLocalDate().isBefore(firstTime.getVaccinatedAt())) {
-				throw new VaccinationTooEarlyException();
-			}
-
-		}
+		validateConsistensyForSecondDoses(publicUser, cell);
 
 		var vaccineStock = vaccineStocks.stream().filter(VaccineStock::isEnough).sorted((a, b) -> {
 			// 配送予定日・作成日時の順でソート➙古いのから割り当てる
@@ -109,6 +94,28 @@ public class ReservationService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DuplicateRservationException();
 		}
+	}
+
+	void validateConsistensyForSecondDoses(PublicUser publicUser, Cell cell) throws ReserveFailureException {
+
+		// １回目を接種しているならその時と整合性を確認する。
+		var history = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
+		if (history.isEmpty()) {
+			return;
+		}
+
+		var firstTime = history.get(0);
+
+		// ワクチンの種類
+		if (cell.getRoom().getVaccine() != firstTime.getVaccine()) {
+			throw new VaccineMismatchException();
+		}
+
+		// 接種間隔
+		if (cell.getBeginTime().toLocalDate().isBefore(firstTime.getVaccinatedAt())) {
+			throw new VaccinationTooEarlyException();
+		}
+
 	}
 
 	public Optional<Reservation> getReservation(UUID publicUserId) {
