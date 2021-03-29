@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine;
 
-public class VaccinationForm {
+class VaccinationForm {
 	@Size(max = 255)
 	@NotBlank
 	private String reservationNumber;

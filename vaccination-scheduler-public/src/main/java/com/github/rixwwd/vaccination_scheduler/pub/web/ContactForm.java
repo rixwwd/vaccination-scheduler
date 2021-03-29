@@ -3,7 +3,7 @@ package com.github.rixwwd.vaccination_scheduler.pub.web;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
-public class ContactForm {
+class ContactForm {
 
 	@Size(max = 255)
 	private String telephoneNumber;

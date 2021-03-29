@@ -3,7 +3,7 @@ package com.github.rixwwd.vaccination_scheduler.pub.web;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class PasswordForm {
+class PasswordForm {
 
 	@NotBlank
 	@Size(max = 255)
