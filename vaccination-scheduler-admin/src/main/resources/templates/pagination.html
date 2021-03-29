@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <th:block th:fragment="pagination(results, basePath)">
+  <nav th:if="${results.totalPages} > 1">
+    <ul class="pagination">
+      <li class="page-item" th:classappend="${results.isFirst ? 'disabled' : _}">
+        <a class="page-link" href="#" th:href="@{${basePath}(page=${results.previousPageable() != T(org.springframework.data.domain.Unpaged).INSTANCE ? results.previousPageable.pageNumber : 0})}">Previous</a>
+      </li>
+      <th:block th:with="from=${results.pageable.pageNumber-2 < 0 ? 0 : results.pageable.pageNumber-2},to=${results.pageable.pageNumber+2 < results.totalPages ? results.pageable.pageNumber+2 : results.totalPages}">
+      <li class="page-item" th:each="pageNumber : ${#numbers.sequence(from,to-1)}" th:classappend="${ results.pageable.pageNumber == pageNumber ? 'active' : _}"><a class="page-link" href="#" th:href="@{${basePath}(page=${pageNumber})}" th:text="${pageNumber+1}">1</a></li>
+      </th:block>
+      <li class="page-item" th:classappend="${!results.hasNext ? 'disabled' : _}">
+        <a class="page-link" href="#" th:href="@{${basePath}(page=${results.nextPageable() != T(org.springframework.data.domain.Unpaged).INSTANCE ? results.nextPageable.pageNumber : 0})}">Next</a>
+      </li>
+    </ul>
+  </nav>
+  </th:block>
+</body>

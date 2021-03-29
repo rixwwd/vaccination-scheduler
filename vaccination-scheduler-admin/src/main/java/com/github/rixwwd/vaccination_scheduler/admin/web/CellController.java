@@ -3,6 +3,7 @@ package com.github.rixwwd.vaccination_scheduler.admin.web;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -34,10 +35,10 @@ public class CellController {
 	}
 
 	@GetMapping("/cell/")
-	public ModelAndView index() {
+	public ModelAndView index(Pageable pageable) {
 
 		var modelAndView = new ModelAndView("cell/index");
-		var cells = cellRepository.findAll();
+		var cells = cellRepository.findAll(pageable);
 		modelAndView.addObject("cells", cells);
 		return modelAndView;
 	}

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.validation.groups.Default;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -41,10 +42,10 @@ public class PublicUserController {
 	}
 
 	@GetMapping("/publicUser/")
-	public ModelAndView index() {
+	public ModelAndView index(Pageable pageable) {
 
 		var modelAndView = new ModelAndView("publicUser/index");
-		var publicUsers = publicUserRepository.findAll();
+		var publicUsers = publicUserRepository.findAll(pageable);
 		modelAndView.addObject("publicUsers", publicUsers);
 		return modelAndView;
 	}
