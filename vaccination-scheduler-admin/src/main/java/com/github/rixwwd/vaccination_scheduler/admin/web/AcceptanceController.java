@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import com.github.rixwwd.vaccination_scheduler.admin.exception.DoubleAcceptanceE
 import com.github.rixwwd.vaccination_scheduler.admin.exception.ReservationNotFoundException;
 import com.github.rixwwd.vaccination_scheduler.admin.service.AcceptanceService;
 
+@PreAuthorize("isAuthenticated() && hasAuthority('ACCEPTANCE')")
 @Controller
 public class AcceptanceController {
 

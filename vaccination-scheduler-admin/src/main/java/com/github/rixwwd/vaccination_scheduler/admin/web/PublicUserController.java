@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.validation.groups.Default;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ import com.github.rixwwd.vaccination_scheduler.admin.exception.NotFoundException
 import com.github.rixwwd.vaccination_scheduler.admin.repository.PublicUserRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.service.PublicUserUploadService;
 
+@PreAuthorize("isAuthenticated() && hasAuthority('PUBLIC_USER')")
 @Controller
 public class PublicUserController {
 

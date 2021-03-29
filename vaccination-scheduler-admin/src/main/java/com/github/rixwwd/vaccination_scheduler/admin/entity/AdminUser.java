@@ -123,8 +123,9 @@ public class AdminUser implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Arrays.asList(new SimpleGrantedAuthority("ROOM"), new SimpleGrantedAuthority("CELL"),
 				new SimpleGrantedAuthority("VACCINE"), new SimpleGrantedAuthority("ADMIN_USER"),
-				new SimpleGrantedAuthority("PUBLIC_USER"), new SimpleGrantedAuthority("VACCINE_HISTORY"),
-				new SimpleGrantedAuthority("RESERVATION"));
+				new SimpleGrantedAuthority("PUBLIC_USER"), new SimpleGrantedAuthority(
+						"VACCINE_STOCK"),new SimpleGrantedAuthority("ACCEPTANCE"),
+				new SimpleGrantedAuthority("VACCINATION"));
 	}
 
 	@Override

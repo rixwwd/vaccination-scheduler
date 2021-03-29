@@ -2,6 +2,7 @@ package com.github.rixwwd.vaccination_scheduler.admin.web;
 
 import java.io.IOException;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.service.CouponService;
 
+@PreAuthorize("isAuthenticated() && hasAuthority('PUBLIC_USER')")
 @Controller
 public class CouponController {
 

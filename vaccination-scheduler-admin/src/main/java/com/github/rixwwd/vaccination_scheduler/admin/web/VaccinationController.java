@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,7 @@ import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchEx
 import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.service.VaccinationService;
 
+@PreAuthorize("isAuthenticated() && hasAuthority('VACCINATION')")
 @Controller
 public class VaccinationController {
 

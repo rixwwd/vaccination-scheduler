@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +24,7 @@ import com.github.rixwwd.vaccination_scheduler.admin.exception.NotFoundException
 import com.github.rixwwd.vaccination_scheduler.admin.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.RoomRepository;
 
+@PreAuthorize("isAuthenticated() && hasAuthority('CELL')")
 @Controller
 public class CellController {
 

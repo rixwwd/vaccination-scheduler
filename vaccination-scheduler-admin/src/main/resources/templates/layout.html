@@ -25,18 +25,18 @@
     <th:block th:if="${#authorization.expression('isAuthenticated()')}">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" th:if="${#authorization.expression('hasAnyAuthority(''ROOM'', ''CELL'', ''VACCINE_STOCK'', ''PUBLIC_USER'')')}">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             マスターデータ
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" th:href="@{/room/}">場所</a></li>
-            <li><a class="dropdown-item" href="#" th:href="@{/cell/}">時間枠</a></li>
-            <li><a class="dropdown-item" href="#" th:href="@{/vaccineStock/}">ワクチン在庫</a></li>
-            <li><a class="dropdown-item" href="#" th:href="@{/publicUser/}">住民</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/room/}" th:if="${#authorization.expression('hasAuthority(''ROOM'')')}">場所</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/cell/}" th:if="${#authorization.expression('hasAuthority(''CELL'')')}">時間枠</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/vaccineStock/}" th:if="${#authorization.expression('hasAuthority(''VACCINE_STOCK'')')}">ワクチン在庫</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/publicUser/}" th:if="${#authorization.expression('hasAuthority(''PUBLIC_USER'')')}">住民</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" th:if="${#authorization.expression('hasAuthority(''PUBLIC_USER'')')}">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             クーポン
           </a>
@@ -44,13 +44,13 @@
             <li><a class="dropdown-item" href="#" th:href="@{/coupon/upload}">クーポン付与</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" th:if="${#authorization.expression('hasAnyAuthority(''PUBLIC_USER'', ''VACCINATION'')')}">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             受付
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" th:href="@{/acceptance/}">予約確認</a></li>
-            <li><a class="dropdown-item" href="#" th:href="@{/vaccination/}">接種完了</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/acceptance/}" th:if="${#authorization.expression('hasAuthority(''ACCEPTANCE'')')}">予約確認</a></li>
+            <li><a class="dropdown-item" href="#" th:href="@{/vaccination/}" th:if="${#authorization.expression('hasAuthority(''VACCINATION'')')}">接種完了</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
