@@ -23,26 +23,34 @@ import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.ReservationRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccineStockRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.WaitingListRepository;
 
 @Service
 public class ReservationService {
 
 	private static final SecureRandom random = new SecureRandom();
 
-	private ReservationRepository reservationRepository;
+	private final ReservationRepository reservationRepository;
 
-	private CellRepository cellRepository;
+	private final CellRepository cellRepository;
 
-	private VaccineStockRepository vaccineStockRepository;
+	private final VaccineStockRepository vaccineStockRepository;
 
-	private VaccinationHistoryRepository vaccinationHistoryRepository;
+	private final VaccinationHistoryRepository vaccinationHistoryRepository;
+
+	private final CancelNoticeService cancelNoticeService;
+
+	private final WaitingListRepository waitingListRepository;
 
 	public ReservationService(ReservationRepository reservationRepository, CellRepository cellRepository,
-			VaccineStockRepository vaccineStockRepository, VaccinationHistoryRepository vaccinationHistoryRepository) {
+			VaccineStockRepository vaccineStockRepository, VaccinationHistoryRepository vaccinationHistoryRepository,
+			CancelNoticeService cancelNoticeService, WaitingListRepository waitingListRepository) {
 		this.reservationRepository = reservationRepository;
 		this.cellRepository = cellRepository;
 		this.vaccineStockRepository = vaccineStockRepository;
 		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
+		this.cancelNoticeService = cancelNoticeService;
+		this.waitingListRepository = waitingListRepository;
 	}
 
 	@Transactional
@@ -89,11 +97,16 @@ public class ReservationService {
 		// FIXME 番号の発行アルゴリズム
 		reservation.setReservationNumber(String.format("%05d", random.nextInt(100000)));
 
+		Reservation newReservation;
 		try {
-			return reservationRepository.saveAndFlush(reservation);
+			newReservation = reservationRepository.saveAndFlush(reservation);
 		} catch (DataIntegrityViolationException e) {
 			throw new DuplicateRservationException();
 		}
+
+		waitingListRepository.deleteByPublicUserId(publicUser.getId());
+
+		return newReservation;
 	}
 
 	void validateConsistensyForSecondDoses(PublicUser publicUser, Cell cell) throws ReserveFailureException {
@@ -144,5 +157,7 @@ public class ReservationService {
 		vaccineStockRepository.save(vaccineStock);
 
 		reservationRepository.delete(reservation);
+
+		cancelNoticeService.notifyCancel(reservation.getCell());
 	}
 }

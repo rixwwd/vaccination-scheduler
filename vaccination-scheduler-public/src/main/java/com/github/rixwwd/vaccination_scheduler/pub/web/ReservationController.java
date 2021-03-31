@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -28,6 +29,7 @@ import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccinationTooEarly
 import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineShortageException;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.PublicUserRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.RoomRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.service.ReservationService;
@@ -44,13 +46,17 @@ public class ReservationController {
 
 	private VaccinationHistoryRepository vaccinationHistoryRepository;
 
+	private PublicUserRepository publicUserRepository;
+
 	public ReservationController(ReservationService reservationService, RoomRepository roomRepository,
-			CellRepository cellRepository, VaccinationHistoryRepository vaccinationHistoryRepository) {
+			CellRepository cellRepository, VaccinationHistoryRepository vaccinationHistoryRepository,
+			PublicUserRepository publicUserRepository) {
 
 		this.reservationService = reservationService;
 		this.roomRepository = roomRepository;
 		this.cellRepository = cellRepository;
 		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
+		this.publicUserRepository = publicUserRepository;
 	}
 
 	@GetMapping("/reservation/new")
@@ -75,13 +81,14 @@ public class ReservationController {
 	}
 
 	@PostMapping("/reservation/")
-	public ModelAndView create(@AuthenticationPrincipal PublicUser publicUser, @Validated Reservation reservation,
+	public ModelAndView create(@AuthenticationPrincipal UserDetails user, @Validated Reservation reservation,
 			BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
 			return new ModelAndView("reservation/new");
 		}
 
+		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 		reservation.setPublicUserId(publicUser.getId());
 
 		String errorMessage = null;
@@ -139,7 +146,9 @@ public class ReservationController {
 	 * @return {@link Room}
 	 */
 	@ModelAttribute("rooms")
-	List<Room> rooms(@AuthenticationPrincipal PublicUser publicUser) {
+	List<Room> rooms(@AuthenticationPrincipal UserDetails user) {
+
+		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 
 		var histories = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
 		if (histories.isEmpty()) {
@@ -155,9 +164,11 @@ public class ReservationController {
 	 * @return {@link Cell}
 	 */
 	@ModelAttribute("cells")
-	List<Cell> cells(@AuthenticationPrincipal PublicUser publicUser) {
+	List<Cell> cells(@AuthenticationPrincipal UserDetails user) {
 
 		var now = LocalDateTime.now();
+
+		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 
 		var histories = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
 		if (histories.isEmpty()) {

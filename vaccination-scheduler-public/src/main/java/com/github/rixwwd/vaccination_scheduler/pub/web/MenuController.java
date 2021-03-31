@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.WaitingListRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.service.ReservationService;
 
 @Controller
@@ -16,10 +17,13 @@ public class MenuController {
 
 	private VaccinationHistoryRepository vaccinationHistoryRepository;
 
+	private WaitingListRepository waitingListRepository;
+
 	public MenuController(ReservationService reservationService,
-			VaccinationHistoryRepository vaccinationHistoryRepository) {
+			VaccinationHistoryRepository vaccinationHistoryRepository, WaitingListRepository waitingListRepository) {
 		this.reservationService = reservationService;
 		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
+		this.waitingListRepository = waitingListRepository;
 	}
 
 	@GetMapping("/menu/")
@@ -32,6 +36,9 @@ public class MenuController {
 		var vaccinationHistories = vaccinationHistoryRepository
 				.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
 		modelAndView.addObject("vaccinationHistories", vaccinationHistories);
+
+		var waitingList = waitingListRepository.findByPublicUserId(publicUser.getId());
+		modelAndView.addObject("waitingList", waitingList);
 
 		return modelAndView;
 	}

@@ -41,11 +41,11 @@
 	  <template v-for="c in cell.cells">
 	    <template v-if="c.reservationCount < c.capacity">
           <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input">
-          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }} {{ c.reservationCount/c.capacity >= 0.9 ? '残り少し' : ''}}</label>
+          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }}</label><span class="mx-1">{{ c.reservationCount/c.capacity >= 0.9 ? '残り少し' : ''}}</span>
         </template>
         <template v-else>
           <input type="radio" name="cellId" v-bind:id="c.id" v-bind:value="c.id" class="form-check-input" disabled>
-          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }} 満員</label>
+          <label v-bind:for="c.id" class="form-check-label">{{ c.beginTime}} - {{ c.endTime }}</label><a class="mx-1" v-bind:href="c.waitingListUrl">満員(キャンセル待ち)</a>
         </template>
         <br>
 	  </template>
@@ -71,7 +71,6 @@
 			  },
 			  computed: {
 				  cells: function() {
-					  //return this.allCells.filter(cell => cell.roomId === this.selectedRoomId)
 					var selectCells = this.allCells.filter(cell => cell.roomId === this.selectedRoomId)
 					    .reduce((acc, cur)=>{
 					    	var key = cur.beginTime.split(' ')[0];
@@ -91,6 +90,10 @@
 							t = {...times[j]}
 							t.beginTime = times[j].beginTime.split(' ')[1];
 							t.endTime = times[j].endTime.split(' ')[1];
+							
+							const basePath = /*[[@{/waitingList/new}]]*/'/waitingList/new';
+							t.waitingListUrl = basePath + "?" + new URLSearchParams( { cellId: t.id } ).toString();
+
 							dateCell.cells.push(t);
 						}
 						list.push(dateCell);
