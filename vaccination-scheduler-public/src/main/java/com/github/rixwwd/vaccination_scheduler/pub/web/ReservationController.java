@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.rixwwd.vaccination_scheduler.pub.entity.ActionType;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Cell;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
@@ -30,6 +31,7 @@ import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineShortageExce
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.PublicUserRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.RoomRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.service.ActionLogService;
 import com.github.rixwwd.vaccination_scheduler.pub.service.ReservationService;
 import com.github.rixwwd.vaccination_scheduler.pub.service.VaccinationTimePastException;
 
@@ -44,13 +46,17 @@ public class ReservationController {
 
 	private final PublicUserRepository publicUserRepository;
 
+	private final ActionLogService actionLogService;
+
 	public ReservationController(ReservationService reservationService, RoomRepository roomRepository,
-			CellRepository cellRepository, PublicUserRepository publicUserRepository) {
+			CellRepository cellRepository, PublicUserRepository publicUserRepository,
+			ActionLogService actionLogService) {
 
 		this.reservationService = reservationService;
 		this.roomRepository = roomRepository;
 		this.cellRepository = cellRepository;
 		this.publicUserRepository = publicUserRepository;
+		this.actionLogService = actionLogService;
 	}
 
 	@GetMapping("/reservation/new")
@@ -105,6 +111,8 @@ public class ReservationController {
 			return new ModelAndView("reservation/new", Map.of("errorMessage", errorMessage));
 		}
 
+		actionLogService.log(publicUser, ActionType.RESERVE);
+
 		return new ModelAndView("redirect:/reservation/");
 	}
 
@@ -118,6 +126,7 @@ public class ReservationController {
 	public String delete(PublicUser publicUser) {
 
 		reservationService.cancel(publicUser);
+		actionLogService.log(publicUser, ActionType.RESERVE_CANCEL);
 		return "redirect:/menu/";
 	}
 
