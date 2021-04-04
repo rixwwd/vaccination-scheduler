@@ -20,6 +20,4 @@ public interface VaccinationHistoryRepository extends JpaRepository<VaccinationH
 			+ "order by vaccinatedAt asc")
 	//@formatter:on
 	List<VaccinationCount> countGroupByVaccinatedAt();
-
-	List<VaccinationHistory> findByPublicUserIdOrderByVaccinatedAtAsc(UUID publicUserId);
 }
