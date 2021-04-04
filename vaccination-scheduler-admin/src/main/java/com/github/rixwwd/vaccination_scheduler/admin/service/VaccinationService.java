@@ -57,6 +57,7 @@ public class VaccinationService {
 		vaccinationHistory.setPublicUser(reservation.getPublicUser());
 		vaccinationHistory.setVaccinatedAt(LocalDate.now());
 		vaccinationHistory.setVaccine(vaccine);
+		vaccinationHistory.setRoomId(reservation.getCell().getRoomId());
 		var savedHistory = vaccinationHistoryRepository.save(vaccinationHistory);
 
 		// クーポン無効化
