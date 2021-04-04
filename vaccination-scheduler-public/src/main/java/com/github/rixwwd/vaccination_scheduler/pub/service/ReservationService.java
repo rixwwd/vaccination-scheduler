@@ -1,8 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.pub.service;
 
 import java.security.SecureRandom;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -20,10 +18,9 @@ import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccinationTooEarly
 import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.VaccineShortageException;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.PublicUserRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.ReservationRepository;
-import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccineStockRepository;
-import com.github.rixwwd.vaccination_scheduler.pub.repository.WaitingListRepository;
 
 @Service
 public class ReservationService {
@@ -36,25 +33,22 @@ public class ReservationService {
 
 	private final VaccineStockRepository vaccineStockRepository;
 
-	private final VaccinationHistoryRepository vaccinationHistoryRepository;
-
 	private final CancelNoticeService cancelNoticeService;
 
-	private final WaitingListRepository waitingListRepository;
+	private final PublicUserRepository publicUserRepository;
 
 	public ReservationService(ReservationRepository reservationRepository, CellRepository cellRepository,
-			VaccineStockRepository vaccineStockRepository, VaccinationHistoryRepository vaccinationHistoryRepository,
-			CancelNoticeService cancelNoticeService, WaitingListRepository waitingListRepository) {
+			VaccineStockRepository vaccineStockRepository, CancelNoticeService cancelNoticeService,
+			PublicUserRepository publicUserRepository) {
 		this.reservationRepository = reservationRepository;
 		this.cellRepository = cellRepository;
 		this.vaccineStockRepository = vaccineStockRepository;
-		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
 		this.cancelNoticeService = cancelNoticeService;
-		this.waitingListRepository = waitingListRepository;
+		this.publicUserRepository = publicUserRepository;
 	}
 
 	@Transactional
-	public Reservation reserve(Reservation reservation, PublicUser publicUser) throws ReserveFailureException {
+	public void reserve(Reservation reservation, PublicUser publicUser) throws ReserveFailureException {
 
 		if (!publicUser.hasCoupon(reservation.getCoupon())) {
 			throw new InvalidCouponException("coupon mismatch.");
@@ -96,48 +90,42 @@ public class ReservationService {
 
 		// FIXME 番号の発行アルゴリズム
 		reservation.setReservationNumber(String.format("%05d", random.nextInt(100000)));
+		publicUser.getReservations().add(reservation);
 
-		Reservation newReservation;
+		publicUser.getWaitingList().clear();
+
 		try {
-			newReservation = reservationRepository.saveAndFlush(reservation);
+			publicUserRepository.saveAndFlush(publicUser);
 		} catch (DataIntegrityViolationException e) {
 			throw new DuplicateRservationException();
 		}
 
-		waitingListRepository.deleteByPublicUserId(publicUser.getId());
-
-		return newReservation;
 	}
 
 	void validateConsistensyForSecondDoses(PublicUser publicUser, Cell cell) throws ReserveFailureException {
 
 		// １回目を接種しているならその時と整合性を確認する。
-		var history = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
-		if (history.isEmpty()) {
+		var firstTime = publicUser.getFirstVaccinationHistory();
+		if (firstTime.isEmpty()) {
 			return;
 		}
 
-		var firstTime = history.get(0);
-
 		// ワクチンの種類
-		if (cell.getRoom().getVaccine() != firstTime.getVaccine()) {
+		if (cell.getRoom().getVaccine() != firstTime.get().getVaccine()) {
 			throw new VaccineMismatchException();
 		}
 
 		// 接種間隔
-		if (cell.getBeginTime().toLocalDate().isBefore(firstTime.getVaccinatedAt())) {
+		if (cell.getBeginTime().toLocalDate().isBefore(firstTime.get().getVaccinatedAt())) {
 			throw new VaccinationTooEarlyException();
 		}
 
 	}
 
-	public Optional<Reservation> getReservation(UUID publicUserId) {
-		return reservationRepository.findByPublicUserIdAndAcceptedIsFalse(publicUserId);
-	}
-
 	@Transactional
-	public void cancel(Reservation reservation) {
+	public void cancel(PublicUser publicUser) {
 
+		var reservation = publicUser.getReservation();
 		var cell = cellRepository.findByIdForWrite(reservation.getCellId()).orElseThrow();
 
 		cell.decrementReservationCount();
@@ -156,7 +144,8 @@ public class ReservationService {
 		vaccineStock.decrementReservationCount();
 		vaccineStockRepository.save(vaccineStock);
 
-		reservationRepository.delete(reservation);
+		publicUser.cancelReservation();
+		publicUserRepository.save(publicUser);
 
 		cancelNoticeService.notifyCancel(reservation.getCell());
 	}

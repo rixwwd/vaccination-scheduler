@@ -14,7 +14,4 @@ public interface WaitingListRepository extends JpaRepository<WaitingList, Waitin
 
 	List<WaitingList> findByCellIdOrderByCreatedAtAsc(UUID cellId);
 
-	List<WaitingList> findByPublicUserId(UUID publicUserId);
-
-	void deleteByPublicUserId(UUID publicUserId);
 }

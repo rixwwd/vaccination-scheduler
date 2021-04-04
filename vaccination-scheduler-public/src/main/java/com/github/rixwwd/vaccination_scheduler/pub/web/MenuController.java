@@ -1,45 +1,32 @@
 package com.github.rixwwd.vaccination_scheduler.pub.web;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
-import com.github.rixwwd.vaccination_scheduler.pub.repository.VaccinationHistoryRepository;
-import com.github.rixwwd.vaccination_scheduler.pub.repository.WaitingListRepository;
-import com.github.rixwwd.vaccination_scheduler.pub.service.ReservationService;
+import com.github.rixwwd.vaccination_scheduler.pub.repository.PublicUserRepository;
 
 @Controller
 public class MenuController {
 
-	private ReservationService reservationService;
+	private final PublicUserRepository publicUserRepository;
 
-	private VaccinationHistoryRepository vaccinationHistoryRepository;
-
-	private WaitingListRepository waitingListRepository;
-
-	public MenuController(ReservationService reservationService,
-			VaccinationHistoryRepository vaccinationHistoryRepository, WaitingListRepository waitingListRepository) {
-		this.reservationService = reservationService;
-		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
-		this.waitingListRepository = waitingListRepository;
+	public MenuController(PublicUserRepository publicUserRepository) {
+		this.publicUserRepository = publicUserRepository;
 	}
 
 	@GetMapping("/menu/")
-	public ModelAndView index(@AuthenticationPrincipal PublicUser publicUser) {
+	public ModelAndView index() {
 
-		var reservation = reservationService.getReservation(publicUser.getId());
-		var modelAndView = new ModelAndView("menu/index");
-		modelAndView.addObject("reservation", reservation.orElse(null));
+		return new ModelAndView("menu/index");
+	}
 
-		var vaccinationHistories = vaccinationHistoryRepository
-				.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
-		modelAndView.addObject("vaccinationHistories", vaccinationHistories);
-
-		var waitingList = waitingListRepository.findByPublicUserId(publicUser.getId());
-		modelAndView.addObject("waitingList", waitingList);
-
-		return modelAndView;
+	@ModelAttribute(binding = false)
+	public PublicUser publicUser(@AuthenticationPrincipal UserDetails user) {
+		return publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 	}
 }

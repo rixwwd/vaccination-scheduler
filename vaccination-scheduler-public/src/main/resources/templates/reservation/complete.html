@@ -11,21 +11,21 @@
 <div th:fragment="content" class="container-md">
 <h1>予約完了</h1>
 
-<form th:action="@{/menu/}" th:object="${reservation}" method="get">
+<form th:action="@{/menu/}" th:object="${publicUser.reservation}" method="get">
 
   <div class="mb-3">
     <label for="room" class="form-label">予約番号</label>
-    <input type="text" id="reservationNumber" th:value="${reservation.reservationNumber}" class="form-control-plaintext" readonly>
+    <input type="text" id="reservationNumber" th:value="${publicUser.reservation.reservationNumber}" class="form-control-plaintext" readonly>
   </div>
   
   <div class="mb-3">
     <label for="room" class="form-label">場所</label>
-    <input type="text" id="room" th:value="${reservation.cell.room.name}" class="form-control-plaintext" readonly>
+    <input type="text" id="room" th:value="${publicUser.reservation.cell.room.name}" class="form-control-plaintext" readonly>
   </div>
  
    <div class="mb-3">
     <label for="dateTime" class="form-label">日時</label>
-    <input type="text" id="dateTime" th:value="${#temporals.format(reservation.cell.beginTime, 'uuuu/MM/dd HH:mm') + ' - ' + #temporals.format(reservation.cell.endTime, 'HH:mm')}" class="form-control-plaintext" readonly>
+    <input type="text" id="dateTime" th:value="${#temporals.format(publicUser.reservation.cell.beginTime, 'uuuu/MM/dd HH:mm') + ' - ' + #temporals.format(publicUser.reservation.cell.endTime, 'HH:mm')}" class="form-control-plaintext" readonly>
   </div>
  
   <div class="mb-3">

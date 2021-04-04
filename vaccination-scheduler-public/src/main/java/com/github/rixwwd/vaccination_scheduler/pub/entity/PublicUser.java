@@ -4,8 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -90,7 +94,16 @@ public class PublicUser implements UserDetails {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
 	@Valid
-	private List<Coupon> coupons;
+	private Set<Coupon> coupons;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId", orphanRemoval = true)
+	private Set<Reservation> reservations = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	private Set<WaitingList> waitingList = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	private Set<VaccinationHistory> vaccinationHistories = new HashSet<>();
 
 	@CreatedDate
 	@Column
@@ -196,12 +209,36 @@ public class PublicUser implements UserDetails {
 		this.sms = sms;
 	}
 
-	public List<Coupon> getCoupons() {
+	public Set<Coupon> getCoupons() {
 		return coupons;
 	}
 
-	public void setCoupons(List<Coupon> coupons) {
+	public void setCoupons(Set<Coupon> coupons) {
 		this.coupons = coupons;
+	}
+
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public Set<WaitingList> getWaitingList() {
+		return waitingList;
+	}
+
+	public void setWaitingList(Set<WaitingList> waitingList) {
+		this.waitingList = waitingList;
+	}
+
+	public Set<VaccinationHistory> getVaccinationHistories() {
+		return vaccinationHistories;
+	}
+
+	public void setVaccinationHistories(Set<VaccinationHistory> vaccinationHistories) {
+		this.vaccinationHistories = vaccinationHistories;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -252,6 +289,24 @@ public class PublicUser implements UserDetails {
 
 	public boolean hasCoupon(String coupon) {
 		return coupons.stream().anyMatch(c -> c.getCoupon().equals(coupon) && !c.isUsed());
+	}
+
+	public Reservation getReservation() {
+		return reservations.stream().filter(r -> !r.isAccepted()).findFirst().orElse(null);
+	}
+
+	public void cancelReservation() {
+		reservations.remove(getReservation());
+	}
+
+	public Optional<VaccinationHistory> getFirstVaccinationHistory() {
+		return vaccinationHistories.stream().sorted((a, b) -> a.getVaccinatedAt().compareTo(b.getVaccinatedAt()))
+				.findFirst();
+	}
+
+	public List<VaccinationHistory> getSortedVaccinationHistories() {
+		return vaccinationHistories.stream().sorted((a, b) -> a.getVaccinatedAt().compareTo(b.getVaccinatedAt()))
+				.collect(Collectors.toList());
 	}
 
 	public static interface Create {

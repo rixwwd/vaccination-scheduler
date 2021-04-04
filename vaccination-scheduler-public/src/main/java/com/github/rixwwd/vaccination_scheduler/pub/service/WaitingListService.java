@@ -29,7 +29,8 @@ public class WaitingListService {
 		}
 
 		var waitingList = new WaitingList();
-		waitingList.setWaitingListPk(new WaitingListPk(cell.getId(), publicUser.getId()));
+		waitingList.setCellId(cell.getId());
+		waitingList.setPublicUserId(publicUser.getId());
 
 		try {
 			waitingListRepository.saveAndFlush(waitingList);
