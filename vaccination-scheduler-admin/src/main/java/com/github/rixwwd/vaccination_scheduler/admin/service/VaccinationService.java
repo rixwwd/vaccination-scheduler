@@ -12,23 +12,18 @@ import com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NoAcceptanceException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchException;
-import com.github.rixwwd.vaccination_scheduler.admin.repository.CouponRepository;
-import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccinationHistoryRepository;
+import com.github.rixwwd.vaccination_scheduler.admin.repository.PublicUserRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccineStockRepository;
 
 @Service
 public class VaccinationService {
 
-	private VaccinationHistoryRepository vaccinationHistoryRepository;
+	private final PublicUserRepository publicUserRepository;
+	private final VaccineStockRepository vaccineStockRepository;
 
-	private CouponRepository couponRepository;
-
-	private VaccineStockRepository vaccineStockRepository;
-
-	public VaccinationService(VaccinationHistoryRepository vaccinationHistoryRepository,
-			CouponRepository couponRepository, VaccineStockRepository vaccineStockRepository) {
-		this.vaccinationHistoryRepository = vaccinationHistoryRepository;
-		this.couponRepository = couponRepository;
+	public VaccinationService(VaccineStockRepository vaccineStockRepository,
+			PublicUserRepository publicUserRepository) {
+		this.publicUserRepository = publicUserRepository;
 		this.vaccineStockRepository = vaccineStockRepository;
 	}
 
@@ -42,13 +37,9 @@ public class VaccinationService {
 
 		var publicUser = reservation.getPublicUser();
 
-		var histories = vaccinationHistoryRepository.findByPublicUserIdOrderByVaccinatedAtAsc(publicUser.getId());
-		if (!histories.isEmpty()) {
-			var history = histories.get(0);
-
-			if (history.getVaccine() != vaccine) {
-				throw new VaccineMismatchException();
-			}
+		var history = publicUser.getFirstVaccinationHistory();
+		if (!history.isEmpty() && history.get().getVaccine() != vaccine) {
+			throw new VaccineMismatchException();
 		}
 
 		// ワクチン接種の履歴を記録
@@ -58,14 +49,15 @@ public class VaccinationService {
 		vaccinationHistory.setVaccinatedAt(LocalDate.now());
 		vaccinationHistory.setVaccine(vaccine);
 		vaccinationHistory.setRoomId(reservation.getCell().getRoomId());
-		var savedHistory = vaccinationHistoryRepository.save(vaccinationHistory);
+		publicUser.getVaccinationHistories().add(vaccinationHistory);
 
 		// クーポン無効化
 		var disabledCoupon = publicUser.getCoupons().stream().filter(c -> c.getCoupon().equals(reservation.getCoupon()))
 				.findFirst().orElseThrow();
 		disabledCoupon.setUsed(true);
 		disabledCoupon.setUsedAt(LocalDateTime.now());
-		couponRepository.save(disabledCoupon);
+
+		publicUserRepository.save(publicUser);
 
 		// ワクチン在庫
 		var vaccineStocks = vaccineStockRepository.findUnusedStockForWrite(reservation.getCell().getRoomId(),
@@ -82,6 +74,6 @@ public class VaccinationService {
 		vaccineStock.incrementVaccinatedCount();
 		vaccineStockRepository.save(vaccineStock);
 
-		return savedHistory;
+		return vaccinationHistory;
 	}
 }

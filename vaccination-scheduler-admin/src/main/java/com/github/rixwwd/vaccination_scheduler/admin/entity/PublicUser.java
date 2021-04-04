@@ -2,7 +2,9 @@ package com.github.rixwwd.vaccination_scheduler.admin.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -91,7 +93,16 @@ public class PublicUser implements PasswordEncodable {
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
 	@Valid
-	private List<Coupon> coupons;
+	private Set<Coupon> coupons;
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId", orphanRemoval = true)
+	private Set<Reservation> reservations = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	private Set<WaitingList> waitingList = new HashSet<>();
+
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "publicUserId")
+	private Set<VaccinationHistory> vaccinationHistories = new HashSet<>();
 
 	@CreatedDate
 	@Column
@@ -197,12 +208,36 @@ public class PublicUser implements PasswordEncodable {
 		this.sms = sms;
 	}
 
-	public List<Coupon> getCoupons() {
+	public Set<Coupon> getCoupons() {
 		return coupons;
 	}
 
-	public void setCoupons(List<Coupon> coupons) {
+	public void setCoupons(Set<Coupon> coupons) {
 		this.coupons = coupons;
+	}
+
+	public Set<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public Set<WaitingList> getWaitingList() {
+		return waitingList;
+	}
+
+	public void setWaitingList(Set<WaitingList> waitingList) {
+		this.waitingList = waitingList;
+	}
+
+	public Set<VaccinationHistory> getVaccinationHistories() {
+		return vaccinationHistories;
+	}
+
+	public void setVaccinationHistories(Set<VaccinationHistory> vaccinationHistories) {
+		this.vaccinationHistories = vaccinationHistories;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -221,13 +256,9 @@ public class PublicUser implements PasswordEncodable {
 		this.updatedAt = updatedAt;
 	}
 
-	public static interface Create {
-	}
-
-	public static interface UpdatePassword {
-	}
-
-	public static interface CreateFromCSV {
+	public Optional<VaccinationHistory> getFirstVaccinationHistory() {
+		return vaccinationHistories.stream().sorted((a, b) -> a.getVaccinatedAt().compareTo(b.getVaccinatedAt()))
+				.findFirst();
 	}
 
 	@Override
@@ -259,6 +290,12 @@ public class PublicUser implements PasswordEncodable {
 		builder.append(sms);
 		builder.append(", coupons=");
 		builder.append(coupons);
+		builder.append(", reservations=");
+		builder.append(reservations);
+		builder.append(", waitingList=");
+		builder.append(waitingList);
+		builder.append(", vaccinationHistories=");
+		builder.append(vaccinationHistories);
 		builder.append(", createdAt=");
 		builder.append(createdAt);
 		builder.append(", updatedAt=");
@@ -266,4 +303,14 @@ public class PublicUser implements PasswordEncodable {
 		builder.append("]");
 		return builder.toString();
 	}
+
+	public static interface Create {
+	}
+
+	public static interface UpdatePassword {
+	}
+
+	public static interface CreateFromCSV {
+	}
+
 }
