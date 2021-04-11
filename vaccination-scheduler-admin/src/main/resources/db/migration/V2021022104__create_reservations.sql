@@ -5,6 +5,7 @@ create table reservations (
   coupon varchar not null,
   reservation_number varchar not null,
   accepted boolean not null,
+  vaccinated boolean not null,
  
   created_at timestamp not null,
   updated_at timestamp not null,

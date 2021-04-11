@@ -256,6 +256,10 @@ public class PublicUser implements PasswordEncodable {
 		this.updatedAt = updatedAt;
 	}
 
+	public Reservation getAcceptedReservation() {
+		return reservations.stream().filter(Reservation::isAccepted).findFirst().orElse(null);
+	}
+
 	public Optional<VaccinationHistory> getFirstVaccinationHistory() {
 		return vaccinationHistories.stream().sorted((a, b) -> a.getVaccinatedAt().compareTo(b.getVaccinatedAt()))
 				.findFirst();

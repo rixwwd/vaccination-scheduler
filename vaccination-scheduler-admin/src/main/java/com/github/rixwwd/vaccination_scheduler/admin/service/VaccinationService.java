@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.Vaccine;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.DoubleVaccinationException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NoAcceptanceException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccinatedException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchException;
@@ -35,9 +36,15 @@ public class VaccinationService {
 			throw new NoAcceptanceException();
 		}
 
+		if (reservation.isVaccinated()) {
+			// 接種済みの人が来るのはおかしい
+			throw new DoubleVaccinationException();
+		}
+
 		var publicUser = reservation.getPublicUser();
 
 		var history = publicUser.getFirstVaccinationHistory();
+
 		if (!history.isEmpty() && history.get().getVaccine() != vaccine) {
 			throw new VaccineMismatchException();
 		}
@@ -50,6 +57,7 @@ public class VaccinationService {
 		vaccinationHistory.setVaccine(vaccine);
 		vaccinationHistory.setRoomId(reservation.getCell().getRoomId());
 		publicUser.getVaccinationHistories().add(vaccinationHistory);
+		publicUser.getAcceptedReservation().setVaccinated(true);
 
 		// クーポン無効化
 		var disabledCoupon = publicUser.getCoupons().stream().filter(c -> c.getCoupon().equals(reservation.getCoupon()))

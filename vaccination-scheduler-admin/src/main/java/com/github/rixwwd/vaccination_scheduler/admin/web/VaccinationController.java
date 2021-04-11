@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.VaccinationHistory;
+import com.github.rixwwd.vaccination_scheduler.admin.exception.DoubleVaccinationException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.NoAcceptanceException;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.VaccineMismatchException;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepository;
@@ -54,6 +55,8 @@ public class VaccinationController {
 			vaccinationHistory = vaccinateionService.vaccinate(reservation.get(), form.getVaccine());
 		} catch (NoAcceptanceException e) {
 			errorMessage = "受付が済んでいません。";
+		} catch (DoubleVaccinationException e) {
+			errorMessage = "同日に2回接種の疑いがあります。";
 		} catch (VaccineMismatchException e) {
 			errorMessage = "前回接種したワクチンと異なるワクチンです。";
 		}

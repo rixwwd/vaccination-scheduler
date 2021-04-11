@@ -58,6 +58,9 @@ public class Reservation {
 	@Column(name = "ACCEPTED")
 	private boolean accepted;
 
+	@Column(name = "VACCINATED")
+	private boolean vaccinated;
+
 	@CreatedDate
 	@Column(name = "CREATED_AT")
 	private LocalDateTime createdAt;
@@ -128,6 +131,14 @@ public class Reservation {
 
 	public void setAccepted(boolean accepted) {
 		this.accepted = accepted;
+	}
+
+	public boolean isVaccinated() {
+		return vaccinated;
+	}
+
+	public void setVaccinated(boolean vaccinated) {
+		this.vaccinated = vaccinated;
 	}
 
 	public LocalDateTime getCreatedAt() {

@@ -3,7 +3,7 @@ create table rooms (
   id uuid primary key,
   name varchar not null unique,
   vaccine varchar not null,
-  
+
   created_at timestamp not null,
   updated_at timestamp not null
 );
@@ -17,10 +17,10 @@ create table cells (
   capacity integer not null,
   accepted_count integer not null,
   reservation_count integer not null,
-  
+
   created_at timestamp not null,
   updated_at timestamp not null,
-  
+
   foreign key (room_id) references rooms (id)
 );
 
@@ -38,7 +38,7 @@ create table public_users (
   telephone_number varchar,
   email varchar,
   sms varchar,
-  
+
   created_at timestamp not null,
   updated_at timestamp not null
 );
@@ -53,13 +53,14 @@ create table reservations (
   coupon varchar not null,
   reservation_number varchar not null,
   accepted boolean not null,
- 
+  vaccinated boolean not null,
+
   created_at timestamp not null,
   updated_at timestamp not null,
-  
+
   foreign key (cell_id) references cells (id),
   foreign key (public_user_id) references public_users (id),
-  
+
   unique (public_user_id, coupon)
 );
 
@@ -72,7 +73,7 @@ create table vaccine_stocks(
   reservation_count integer not null,
   vaccinated_count integer not null,
   vaccine varchar not null,
-  
+
   created_at timestamp not null,
   updated_at timestamp not null
 );
@@ -86,7 +87,7 @@ create table vaccination_histories (
   vaccinated_at date not null,
   room_id uuid not null,
   vaccine varchar not null,
-  
+
   created_at timestamp not null
 );
 
@@ -97,7 +98,7 @@ create table admin_users (
   password varchar not null,
   enabled boolean not null,
   name varchar not null,
-  
+
   created_at timestamp not null,
   updated_at timestamp not null
 );
@@ -115,11 +116,11 @@ create table coupons (
   used_at timestamp,
   created_at timestamp not null,
   updated_at timestamp not null,
-  
+
   primary key (public_user_id, coupon),
   foreign key (public_user_id) references public_users (id),
   unique (public_user_id, name)
-  
+
 );
 
 create index coupons_public_user_id on coupons (public_user_id);
@@ -129,7 +130,7 @@ create table waiting_list (
   cell_id uuid,
   public_user_id uuid,
   created_at timestamp not null,
-  
+
   primary key(cell_id, public_user_id),
   foreign key (public_user_id) references public_users (id),
   foreign key (cell_id) references cells (id)
