@@ -2,6 +2,8 @@ package com.github.rixwwd.vaccination_scheduler.admin.service;
 
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import com.github.rixwwd.vaccination_scheduler.admin.repository.ReservationRepos
 
 @Service
 public class AcceptanceService {
+
+	private static final Logger logger = LoggerFactory.getLogger(AcceptanceService.class);
 
 	private CellRepository cellRepository;
 
@@ -32,6 +36,7 @@ public class AcceptanceService {
 				.orElseThrow(ReservationNotFoundException::new);
 
 		if (reservation.isAccepted()) {
+			logger.error("既に受付済みの予約を再度受け付けようとしました。予約番号=" + reservationNumber);
 			throw new DoubleAcceptanceException(reservation);
 		}
 

@@ -3,6 +3,8 @@ package com.github.rixwwd.vaccination_scheduler.admin.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,8 @@ import com.github.rixwwd.vaccination_scheduler.admin.repository.VaccineStockRepo
 @Service
 public class VaccinationService {
 
+	private static final Logger logger = LoggerFactory.getLogger(VaccinationService.class);
+
 	private final PublicUserRepository publicUserRepository;
 	private final VaccineStockRepository vaccineStockRepository;
 
@@ -33,11 +37,13 @@ public class VaccinationService {
 
 		if (!reservation.isAccepted()) {
 			// 受付してない人が来るのはおかしい
+			logger.error("受付が済んでない人が接種されました。予約番号=" + reservation.getReservationNumber());
 			throw new NoAcceptanceException();
 		}
 
 		if (reservation.isVaccinated()) {
 			// 接種済みの人が来るのはおかしい
+			logger.error("同日に2回接種しました。予約番号=" + reservation.getReservationNumber());
 			throw new DoubleVaccinationException();
 		}
 
@@ -46,6 +52,8 @@ public class VaccinationService {
 		var history = publicUser.getFirstVaccinationHistory();
 
 		if (!history.isEmpty() && history.get().getVaccine() != vaccine) {
+			logger.error("1回目と異なるワクチンを接種しました。予約番号=" + reservation.getReservationNumber());
+			// FIXME 受付でブロックすべき
 			throw new VaccineMismatchException();
 		}
 
