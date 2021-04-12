@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.rixwwd</groupId>
 	<artifactId>vaccination-scheduler-admin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>vaccination-scheduler-admin</name>
 	<description>COVID-19 Vaccination Scheduling Application</description>
 	<properties>
