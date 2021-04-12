@@ -5,12 +5,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUserDetails;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.AdminUserRepository;
 
 @Service
 public class AdminUserDetailsService implements UserDetailsService {
 
-	private AdminUserRepository adminUserRepository;
+	private final AdminUserRepository adminUserRepository;
 
 	public AdminUserDetailsService(AdminUserRepository adminUserRepository) {
 		this.adminUserRepository = adminUserRepository;
@@ -19,9 +20,11 @@ public class AdminUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		return adminUserRepository.findByUsername(username).orElseThrow(() -> {
+		var adminUser = adminUserRepository.findByUsername(username).orElseThrow(() -> {
 			return new UsernameNotFoundException("Username not found. username=" + username);
 		});
+
+		return new AdminUserDetails(adminUser.getUsername(), adminUser.getPassword(), adminUser.isEnabled());
 	}
 
 }

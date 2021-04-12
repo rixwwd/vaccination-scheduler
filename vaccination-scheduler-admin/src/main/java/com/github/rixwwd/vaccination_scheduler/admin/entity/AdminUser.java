@@ -1,8 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.entity;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -19,19 +17,11 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "ADMIN_USERS")
 @EntityListeners(AuditingEntityListener.class)
-public class AdminUser implements UserDetails {
-
-	/**
-	 * Serial Version
-	 */
-	private static final long serialVersionUID = -2335961635167529588L;
+public class AdminUser {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -117,30 +107,6 @@ public class AdminUser implements UserDetails {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROOM"), new SimpleGrantedAuthority("CELL"),
-				new SimpleGrantedAuthority("VACCINE"), new SimpleGrantedAuthority("ADMIN_USER"),
-				new SimpleGrantedAuthority("PUBLIC_USER"), new SimpleGrantedAuthority(
-						"VACCINE_STOCK"),new SimpleGrantedAuthority("ACCEPTANCE"),
-				new SimpleGrantedAuthority("VACCINATION"));
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return this.enabled;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return this.enabled;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return this.enabled;
 	}
 
 }

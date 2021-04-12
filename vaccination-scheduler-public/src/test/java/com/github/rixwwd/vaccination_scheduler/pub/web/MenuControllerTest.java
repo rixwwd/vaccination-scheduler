@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Cell;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
+import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUserDetails;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Reservation;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.Room;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.VaccinationHistory;
@@ -38,12 +39,26 @@ class MenuControllerTest {
 	@MockBean
 	private UserDetailsService userDetailsServcice;
 
-	private PublicUser publicUser;
-
 	@BeforeEach
 	void beforeEach() {
 
-		publicUser = new PublicUser();
+		Mockito.when(userDetailsServcice.loadUserByUsername("user"))
+				.thenReturn(new PublicUserDetails("user", "{noop}password"));
+
+	}
+
+	@Test
+	@WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION)
+	void testIndex(@Autowired MockMvc mvc) throws Exception {
+
+		Mockito.when(publicUserRepository.findByLoginName("user")).thenReturn(Optional.of(getPublicUser()));
+
+		mvc.perform(get("/menu/")).andExpect(status().isOk());
+	}
+
+	private PublicUser getPublicUser() {
+		var publicUser = new PublicUser();
+
 		publicUser.setLoginName("user");
 
 		var room = new Room();
@@ -73,17 +88,7 @@ class MenuControllerTest {
 		publicUser.setWaitingList(Set.of(wl));
 		publicUser.setVaccinationHistories(Set.of(history));
 
-		Mockito.when(userDetailsServcice.loadUserByUsername("user")).thenReturn(publicUser);
-
-	}
-
-	@Test
-	@WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION)
-	void testIndex(@Autowired MockMvc mvc) throws Exception {
-
-		Mockito.when(publicUserRepository.findByLoginName("user")).thenReturn(Optional.of(publicUser));
-
-		mvc.perform(get("/menu/")).andExpect(status().isOk());
+		return publicUser;
 	}
 
 }

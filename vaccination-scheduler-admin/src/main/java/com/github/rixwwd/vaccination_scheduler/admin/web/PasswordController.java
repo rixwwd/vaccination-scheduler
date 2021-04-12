@@ -1,25 +1,30 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUser;
 import com.github.rixwwd.vaccination_scheduler.admin.exception.InvalidPasswordException;
+import com.github.rixwwd.vaccination_scheduler.admin.repository.AdminUserRepository;
 import com.github.rixwwd.vaccination_scheduler.admin.service.PasswordService;
 
 @Controller
 public class PasswordController {
 
-	private PasswordService passwordService;
+	private final PasswordService passwordService;
+	private final AdminUserRepository adminUserRepository;
 
-	public PasswordController(PasswordService passwordService) {
+	public PasswordController(PasswordService passwordService, AdminUserRepository adminUserRepository) {
 		this.passwordService = passwordService;
+		this.adminUserRepository = adminUserRepository;
 	}
 
 	@GetMapping("/password/edit")
@@ -30,8 +35,9 @@ public class PasswordController {
 	}
 
 	@PatchMapping("/password/")
-	public ModelAndView update(@AuthenticationPrincipal AdminUser adminUser, @Validated PasswordForm form,
-			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public ModelAndView update(
+			AdminUser adminUser, @Validated PasswordForm form, BindingResult bindingResult,
+			RedirectAttributes redirectAttributes) {
 
 		if (bindingResult.hasErrors()) {
 			return new ModelAndView("password/edit");
@@ -52,5 +58,10 @@ public class PasswordController {
 		redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
 
 		return new ModelAndView("redirect:/menu/");
+	}
+
+	@ModelAttribute(binding = false)
+	AdminUser adminUser(@AuthenticationPrincipal UserDetails userDetails) {
+		return adminUserRepository.findByUsername(userDetails.getUsername()).orElseThrow();
 	}
 }

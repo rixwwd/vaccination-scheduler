@@ -10,11 +10,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.github.rixwwd.vaccination_scheduler.pub.entity.PublicUser;
 import com.github.rixwwd.vaccination_scheduler.pub.entity.WaitingListPk;
 import com.github.rixwwd.vaccination_scheduler.pub.exception.DuplicateWaitingException;
 import com.github.rixwwd.vaccination_scheduler.pub.repository.CellRepository;
@@ -38,9 +40,7 @@ public class WaitingListController {
 	}
 
 	@GetMapping("/waitingList/new")
-	public ModelAndView newWaitingList(@AuthenticationPrincipal UserDetails user, @RequestParam("cellId") UUID cellId) {
-
-		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
+	public ModelAndView newWaitingList(PublicUser publicUser, @RequestParam("cellId") UUID cellId) {
 
 		String errorMessage = null;
 		if (publicUser.getEmail() == null || publicUser.getEmail().isEmpty()) {
@@ -59,10 +59,8 @@ public class WaitingListController {
 	}
 
 	@PostMapping("/waitingList/")
-	public ModelAndView create(@AuthenticationPrincipal UserDetails user, @Validated WaitingListForm waitingListForm,
+	public ModelAndView create(PublicUser publicUser, @Validated WaitingListForm waitingListForm,
 			BindingResult bindingResult) {
-
-		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 
 		String errorMessage = null;
 
@@ -88,12 +86,16 @@ public class WaitingListController {
 	}
 
 	@DeleteMapping("/waitingList/{id}")
-	public String delete(@AuthenticationPrincipal UserDetails user, @PathVariable("id") UUID cellId) {
-
-		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
+	public String delete(PublicUser publicUser, @PathVariable("id") UUID cellId) {
 
 		waitingListService.delete(new WaitingListPk(cellId, publicUser.getId()));
 		return "redirect:/menu/";
+	}
+
+	@ModelAttribute(binding = false)
+	PublicUser publicUser(@AuthenticationPrincipal UserDetails userDetails) {
+
+		return publicUserRepository.findByLoginName(userDetails.getUsername()).orElseThrow();
 	}
 
 }

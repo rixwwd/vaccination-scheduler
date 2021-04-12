@@ -19,7 +19,7 @@
 <th:block th:if="${#authorization.expression('isAuthenticated()')}">
 <ul class="nav nav-pills justify-content-end">
   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" th:text="${#authentication.principal.loginName}">user1</a>
+    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" th:text="${#authentication.principal.username}">user1</a>
     <ul class="dropdown-menu">
       <li><a class="dropdown-item" href="#" th:href="@{/password/edit}">パスワード変更</a></li>
       <li><hr class="dropdown-divider"></li>

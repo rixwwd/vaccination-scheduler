@@ -142,9 +142,7 @@ public class ReservationController {
 	 * @return {@link Room}
 	 */
 	@ModelAttribute("rooms")
-	List<Room> rooms(@AuthenticationPrincipal UserDetails user) {
-
-		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
+	List<Room> rooms(PublicUser publicUser) {
 
 		var histories = publicUser.getFirstVaccinationHistory();
 		if (histories.isEmpty()) {
@@ -160,11 +158,9 @@ public class ReservationController {
 	 * @return {@link Cell}
 	 */
 	@ModelAttribute("cells")
-	List<Cell> cells(@AuthenticationPrincipal UserDetails user) {
+	List<Cell> cells(PublicUser publicUser) {
 
 		var now = LocalDateTime.now();
-
-		var publicUser = publicUserRepository.findByLoginName(user.getUsername()).orElseThrow();
 
 		var firstTime = publicUser.getFirstVaccinationHistory();
 		if (firstTime.isEmpty()) {

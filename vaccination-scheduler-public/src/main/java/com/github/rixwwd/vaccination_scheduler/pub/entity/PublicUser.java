@@ -2,8 +2,6 @@ package com.github.rixwwd.vaccination_scheduler.pub.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -26,18 +24,10 @@ import javax.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "PUBLIC_USERS")
-public class PublicUser implements UserDetails {
-
-	/**
-	 * Serial version
-	 */
-	private static final long serialVersionUID = -9141467186038061043L;
+public class PublicUser {
 
 	@Id
 	@Column(name = "ID")
@@ -255,36 +245,6 @@ public class PublicUser implements UserDetails {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new SimpleGrantedAuthority("RESERVATION"));
-	}
-
-	@Override
-	public String getUsername() {
-		return this.loginName;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
 	}
 
 	public boolean hasCoupon(String coupon) {
