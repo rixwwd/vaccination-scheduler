@@ -9,6 +9,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -18,10 +19,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.github.rixwwd.vaccination_scheduler.admin.validator.Confirmation;
+
 @Entity
 @Table(name = "ADMIN_USERS")
-@EntityListeners(AuditingEntityListener.class)
-public class AdminUser {
+@EntityListeners({ AuditingEntityListener.class, PasswordEncodeListener.class })
+@Confirmation(field = "plainPassword", confirmationField = "passwordConfirmation")
+public class AdminUser implements PasswordEncodable {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -29,13 +33,23 @@ public class AdminUser {
 	@Column(name = "ID")
 	private UUID id;
 
-	@NotBlank
-	@Pattern(regexp = "[a-z0-9_]{4,255}")
+	@NotBlank(groups = Create.class)
+	@Pattern(regexp = "[a-z0-9_]{4,255}", groups = Create.class)
 	@Column(name = "USERNAME")
 	private String username;
 
 	@Column(name = "PASSWORD")
 	private String password;
+
+	@Transient
+	@NotBlank(groups = Create.class)
+	@Size(min = 8)
+	private String plainPassword;
+
+	@Transient
+	@NotBlank(groups = Create.class)
+	@Size(min = 8)
+	private String passwordConfirmation;
 
 	@Column(name = "ENABLED")
 	private boolean enabled;
@@ -77,6 +91,22 @@ public class AdminUser {
 		this.password = password;
 	}
 
+	public String getPlainPassword() {
+		return plainPassword;
+	}
+
+	public void setPlainPassword(String plainPassword) {
+		this.plainPassword = plainPassword;
+	}
+
+	public String getPasswordConfirmation() {
+		return passwordConfirmation;
+	}
+
+	public void setPasswordConfirmation(String passwordConfirmation) {
+		this.passwordConfirmation = passwordConfirmation;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -107,6 +137,9 @@ public class AdminUser {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public static interface Create {
 	}
 
 }

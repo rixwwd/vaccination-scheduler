@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout::layout(~{}, ~{}, ~{}, ~{::content})}">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:fragment="content" class="container-md">
+<h1>ユーザーの追加</h1>
+
+<form th:action="@{/adminUser/}" th:object="${adminUser}" method="post">
+
+  <div class="mb-3">
+    <label for="name" class="form-label">名前</label>
+    <input type="text" th:field="*{name}" th:errorclass="is-invalid" class="form-control">
+    <ul class="list-unstyled invalid-feedback">
+      <li th:each="err : ${#fields.errors('name')}" th:text="${err}" >
+    </ul>
+  </div>
+
+  <div class="mb-3">
+    <label for="username" class="form-label">ユーザー名</label>
+    <input type="text" th:field="*{username}" th:errorclass="is-invalid" class="form-control">
+    <ul class="list-unstyled invalid-feedback">
+      <li th:each="err : ${#fields.errors('username')}" th:text="${err}" >
+    </ul>
+  </div>
+
+  <div class="mb-3">
+    <label for="plainPassword" class="form-label">パスワード</label>
+    <input type="password" th:field="*{plainPassword}" th:errorclass="is-invalid" class="form-control">
+    <ul class="list-unstyled invalid-feedback">
+      <li th:each="err : ${#fields.errors('plainPassword')}" th:text="${err}" >
+    </ul>
+  </div>
+
+  <div class="mb-3">
+    <label for="passwordConfirmation" class="form-label">パスワード(確認)</label>
+    <input type="password" th:field="*{passwordConfirmation}" th:errorclass="is-invalid" class="form-control">
+    <ul class="list-unstyled invalid-feedback">
+      <li th:each="err : ${#fields.errors('passwordConfirmation')}" th:text="${err}" >
+    </ul>
+  </div>
+
+  <div class="mb-3">
+	<button type="submit" class="btn btn-primary">追加</button>
+  </div>
+</form>
+
+<a th:href="@{/adminUser/}" class="btn btn-secondary">キャンセル</a>
+</div>
+</body>
+</html>

@@ -69,6 +69,8 @@
             admin
           </a>
           <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" th:href="@{/adminUser/}">ユーザー管理</a></li>
+            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" th:href="@{/password/edit}">パスワード変更</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" th:href="@{/signOut}" data-method="post">サインアウト</a></li>
