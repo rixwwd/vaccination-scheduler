@@ -24,7 +24,8 @@ public class AdminUserDetailsService implements UserDetailsService {
 			return new UsernameNotFoundException("Username not found. username=" + username);
 		});
 
-		return new AdminUserDetails(adminUser.getUsername(), adminUser.getPassword(), adminUser.isEnabled());
+		return new AdminUserDetails(adminUser.getUsername(), adminUser.getPassword(), adminUser.isEnabled(),
+				adminUser.getRole().getAuthorities());
 	}
 
 }

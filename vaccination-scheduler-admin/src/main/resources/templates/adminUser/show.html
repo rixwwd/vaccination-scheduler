@@ -15,6 +15,7 @@
   <tr><th>名前</th><td th:text="${adminUser.name}"></td></tr>
   <tr><th>ユーザー名</th><td th:text="${adminUser.username}"></td></tr>
   <tr><th>状態</th><td th:text="${adminUser.enabled ? '有効' : '無効'}">有効</td></tr>
+  <tr><th>ロール</th><td th:text="${adminUser.role.roleName}">システム管理者</td></tr>
 </table>
 
 <a th:href="@{/adminUser/}" class="btn btn-secondary">一覧へ戻る</a>

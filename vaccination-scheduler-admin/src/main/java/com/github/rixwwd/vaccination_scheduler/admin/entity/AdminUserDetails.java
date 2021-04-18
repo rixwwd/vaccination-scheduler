@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class AdminUserDetails implements UserDetails {
@@ -20,18 +19,18 @@ public class AdminUserDetails implements UserDetails {
 
 	private final boolean enabled;
 
-	public AdminUserDetails(String username, String password, boolean enabled) {
+	private final List<GrantedAuthority> authorities;
+
+	public AdminUserDetails(String username, String password, boolean enabled, List<GrantedAuthority> authorities) {
 		this.username = username;
 		this.password = password;
 		this.enabled = enabled;
+		this.authorities = authorities;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("ROOM"), new SimpleGrantedAuthority("CELL"),
-				new SimpleGrantedAuthority("VACCINE"), new SimpleGrantedAuthority("ADMIN_USER"),
-				new SimpleGrantedAuthority("PUBLIC_USER"), new SimpleGrantedAuthority("VACCINE_STOCK"),
-				new SimpleGrantedAuthority("ACCEPTANCE"), new SimpleGrantedAuthority("VACCINATION"));
+		return authorities;
 	}
 
 	@Override

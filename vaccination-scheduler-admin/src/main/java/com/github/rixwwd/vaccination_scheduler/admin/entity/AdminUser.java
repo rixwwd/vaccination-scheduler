@@ -6,11 +6,14 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -53,6 +56,11 @@ public class AdminUser implements PasswordEncodable {
 
 	@Column(name = "ENABLED")
 	private boolean enabled;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "ROLE")
+	@NotNull
+	private Role role;
 
 	@Size(max = 255)
 	@NotBlank
@@ -115,6 +123,14 @@ public class AdminUser implements PasswordEncodable {
 		this.enabled = enabled;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -140,6 +156,27 @@ public class AdminUser implements PasswordEncodable {
 	}
 
 	public static interface Create {
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("AdminUser [id=");
+		builder.append(id);
+		builder.append(", username=");
+		builder.append(username);
+		builder.append(", enabled=");
+		builder.append(enabled);
+		builder.append(", role=");
+		builder.append(role);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", createdAt=");
+		builder.append(createdAt);
+		builder.append(", updatedAt=");
+		builder.append(updatedAt);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

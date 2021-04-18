@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import javax.validation.groups.Default;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +26,10 @@ import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUser.Create;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.AdminUserRepository;
 
 @Controller
+@PreAuthorize("isAuthenticated() && hasAuthority('ADMIN_USER')")
 public class AdminUserController {
+
+	private final Logger logger = LoggerFactory.getLogger(AdminUserController.class);
 
 	private final AdminUserRepository adminUserRepository;
 
@@ -52,7 +58,9 @@ public class AdminUserController {
 		}
 
 		adminUser.setEnabled(true);
-		adminUserRepository.save(adminUser);
+		var newAdminUser = adminUserRepository.save(adminUser);
+
+		logger.info("ユーザーを作成しました。 AdminUser=" + newAdminUser);
 
 		return new ModelAndView("redirect:/adminUser/");
 	}
@@ -77,7 +85,14 @@ public class AdminUserController {
 		updatedAdminUser.setName(adminUser.getName());
 		updatedAdminUser.setEnabled(adminUser.isEnabled());
 
+		var beforeRole = updatedAdminUser.getRole();
+		var afterRole = adminUser.getRole();
+		updatedAdminUser.setRole(adminUser.getRole());
+
 		adminUserRepository.save(updatedAdminUser);
+		if (beforeRole != afterRole) {
+			logger.info("ユーザーのロールを変更しました。 Before=" + beforeRole + ", AdminUser=" + updatedAdminUser);
+		}
 
 		return new ModelAndView("redirect:/adminUser/");
 	}
@@ -94,12 +109,13 @@ public class AdminUserController {
 	public ModelAndView delete(@PathVariable UUID id) {
 
 		adminUserRepository.deleteById(id);
+		logger.info("ユーザーを削除しました。 ID=" + id);
 		return new ModelAndView("redirect:/adminUser/");
 	}
 
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
-		binder.setAllowedFields("name", "username", "plainPassword", "passwordConfirmation", "enabled");
+		binder.setAllowedFields("name", "username", "plainPassword", "passwordConfirmation", "enabled", "role");
 	}
 
 }

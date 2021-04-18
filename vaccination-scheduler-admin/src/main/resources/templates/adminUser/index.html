@@ -20,6 +20,7 @@
 				<th>名前</th>
 				<th>ユーザー名</th>
 				<th>状態</th>
+				<th>ロール</th>
 				<th colspan="3"></th>
 			</tr>
 		</thead>
@@ -28,6 +29,7 @@
 				<td th:text="${adminUser.name}">管理者</td>
 				<td th:text="${adminUser.username}">admin</td>
 				<td th:text="${adminUser.enabled ? '有効' : '無効'}">有効</td>
+				<td th:text="${adminUser.role.roleName}">システム管理者</td>
 				<td>
 					<a href="#" th:href="@{/adminUser/{id}(id=${adminUser.id})}">詳細</a>
 				</td>

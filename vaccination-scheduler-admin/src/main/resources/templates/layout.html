@@ -44,7 +44,7 @@
             <li><a class="dropdown-item" href="#" th:href="@{/coupon/upload}">クーポン付与</a></li>
           </ul>
         </li>
-        <li class="nav-item dropdown" th:if="${#authorization.expression('hasAnyAuthority(''PUBLIC_USER'', ''VACCINATION'')')}">
+        <li class="nav-item dropdown" th:if="${#authorization.expression('hasAnyAuthority(''ACCEPTANCE'', ''VACCINATION'')')}">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             受付
           </a>
@@ -69,8 +69,11 @@
             admin
           </a>
           <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" th:href="@{/adminUser/}">ユーザー管理</a></li>
-            <li><hr class="dropdown-divider"></li>
+          
+            <th:block th:if="${#authorization.expression('hasAnyAuthority(''ADMIN_USER'')')}">
+              <li><a class="dropdown-item" href="#" th:href="@{/adminUser/}">ユーザー管理</a></li>
+              <li><hr class="dropdown-divider"></li>
+            </th:block>
             <li><a class="dropdown-item" href="#" th:href="@{/password/edit}">パスワード変更</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#" th:href="@{/signOut}" data-method="post">サインアウト</a></li>
@@ -78,7 +81,7 @@
         </li>
       </ul>
 
-    </div>    
+    </div>
     </th:block>
   </div>
 </nav>
