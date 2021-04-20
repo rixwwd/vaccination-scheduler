@@ -1,6 +1,7 @@
 package com.github.rixwwd.vaccination_scheduler.admin.web;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.groups.Default;
@@ -9,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,8 +37,11 @@ public class AdminUserController {
 
 	private final AdminUserRepository adminUserRepository;
 
-	public AdminUserController(AdminUserRepository adminUserRepository) {
+	private final SessionRegistry sessionRegistry;
+
+	public AdminUserController(AdminUserRepository adminUserRepository, SessionRegistry sessionRegistry) {
 		this.adminUserRepository = adminUserRepository;
+		this.sessionRegistry = sessionRegistry;
 	}
 
 	@GetMapping("/adminUser/")
@@ -91,6 +98,7 @@ public class AdminUserController {
 
 		adminUserRepository.save(updatedAdminUser);
 		if (beforeRole != afterRole) {
+			disableSession(updatedAdminUser.getUsername());
 			logger.info("ユーザーのロールを変更しました。 Before=" + beforeRole + ", AdminUser=" + updatedAdminUser);
 		}
 
@@ -116,6 +124,29 @@ public class AdminUserController {
 	@InitBinder
 	void initBinder(WebDataBinder binder) {
 		binder.setAllowedFields("name", "username", "plainPassword", "passwordConfirmation", "enabled", "role");
+	}
+
+	private void disableSession(String username) {
+
+		var principal = findUserDetails(username);
+		if (principal.isEmpty()) {
+			return;
+		}
+
+		var sessionInfo = sessionRegistry.getAllSessions(principal.get(), false);
+		sessionInfo.forEach(SessionInformation::expireNow);
+	}
+
+	private Optional<Object> findUserDetails(String username) {
+		for (var principal : sessionRegistry.getAllPrincipals()) {
+			if (principal instanceof UserDetails) {
+				UserDetails user = (UserDetails) principal;
+				if (user.getUsername().equals(username)) {
+					return Optional.of(principal);
+				}
+			}
+		}
+		return Optional.empty();
 	}
 
 }
