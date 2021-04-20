@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import javax.validation.groups.Default;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -33,14 +36,19 @@ import com.github.rixwwd.vaccination_scheduler.admin.service.PublicUserUploadSer
 @Controller
 public class PublicUserController {
 
-	private PublicUserRepository publicUserRepository;
+	private final Logger logger = LoggerFactory.getLogger(PublicUserController.class);
 
-	private PublicUserUploadService publicUserUploadService;
+	private final PublicUserRepository publicUserRepository;
+
+	private final PublicUserUploadService publicUserUploadService;
+
+	private final PasswordEncoder encoder;
 
 	public PublicUserController(PublicUserRepository publicUserRepository,
-			PublicUserUploadService publicUserUploadService) {
+			PublicUserUploadService publicUserUploadService, PasswordEncoder encoder) {
 		this.publicUserRepository = publicUserRepository;
 		this.publicUserUploadService = publicUserUploadService;
+		this.encoder = encoder;
 	}
 
 	@GetMapping("/publicUser/")
@@ -69,8 +77,7 @@ public class PublicUserController {
 			return modelAndView;
 		}
 
-		// FIXME plainPasswordとplainPasswordCtonfirmationの一致確認
-
+		publicUser.changePassword(encoder);
 		var newPublicUser = publicUserRepository.save(publicUser);
 
 		return new ModelAndView("redirect:/publicUser/" + newPublicUser.getId());
@@ -105,14 +112,17 @@ public class PublicUserController {
 
 		var updatedPublicUser = publicUserRepository.findById(id).orElseThrow(NotFoundException::new);
 
-		// FIXME plainPasswordとplainPasswordCtonfirmationの一致確認
-
 		updatedPublicUser.setName(publicUser.getName());
 		updatedPublicUser.setHurigana(publicUser.getHurigana());
 		updatedPublicUser.setBirthday(publicUser.getBirthday());
 		updatedPublicUser.setAddress(publicUser.getAddress());
+		var passwordChanged = updatedPublicUser.changePassword(encoder);
 
 		var newPublicUser = publicUserRepository.save(updatedPublicUser);
+
+		if (passwordChanged) {
+			logger.info("パスワードを変更しました。 PublicUser = " + updatedPublicUser);
+		}
 
 		return new ModelAndView("redirect:/publicUser/" + newPublicUser.getId());
 	}

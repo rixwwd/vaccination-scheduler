@@ -13,7 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUser;
 import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUser.Create;
+import com.github.rixwwd.vaccination_scheduler.admin.entity.AdminUser.Update;
 import com.github.rixwwd.vaccination_scheduler.admin.repository.AdminUserRepository;
 
 @Controller
@@ -39,9 +42,13 @@ public class AdminUserController {
 
 	private final SessionRegistry sessionRegistry;
 
-	public AdminUserController(AdminUserRepository adminUserRepository, SessionRegistry sessionRegistry) {
+	private final PasswordEncoder passwordEncoder;
+
+	public AdminUserController(AdminUserRepository adminUserRepository, SessionRegistry sessionRegistry,
+			PasswordEncoder passwordEncoder) {
 		this.adminUserRepository = adminUserRepository;
 		this.sessionRegistry = sessionRegistry;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@GetMapping("/adminUser/")
@@ -65,6 +72,8 @@ public class AdminUserController {
 		}
 
 		adminUser.setEnabled(true);
+		adminUser.changePassword(passwordEncoder);
+
 		var newAdminUser = adminUserRepository.save(adminUser);
 
 		logger.info("ユーザーを作成しました。 AdminUser=" + newAdminUser);
@@ -80,7 +89,9 @@ public class AdminUserController {
 	}
 
 	@PutMapping("/adminUser/{id}")
-	public ModelAndView update(@PathVariable UUID id, @Validated AdminUser adminUser, BindingResult bindingResult) {
+	@Transactional
+	public ModelAndView update(@PathVariable UUID id, @Validated({ Default.class, Update.class }) AdminUser adminUser,
+			BindingResult bindingResult) {
 
 		var updatedAdminUser = adminUserRepository.findById(id).get();
 
@@ -91,6 +102,9 @@ public class AdminUserController {
 
 		updatedAdminUser.setName(adminUser.getName());
 		updatedAdminUser.setEnabled(adminUser.isEnabled());
+		updatedAdminUser.setPlainPassword(adminUser.getPlainPassword());
+		updatedAdminUser.setPasswordConfirmation(adminUser.getPasswordConfirmation());
+		var passwordChanged = updatedAdminUser.changePassword(passwordEncoder);
 
 		var beforeRole = updatedAdminUser.getRole();
 		var afterRole = adminUser.getRole();
@@ -100,6 +114,11 @@ public class AdminUserController {
 		if (beforeRole != afterRole) {
 			disableSession(updatedAdminUser.getUsername());
 			logger.info("ユーザーのロールを変更しました。 Before=" + beforeRole + ", AdminUser=" + updatedAdminUser);
+		}
+
+		if (passwordChanged) {
+			disableSession(updatedAdminUser.getUsername());
+			logger.info("パスワードを変更しました。 AdminUser=" + updatedAdminUser);
 		}
 
 		return new ModelAndView("redirect:/adminUser/");

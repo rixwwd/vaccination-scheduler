@@ -21,14 +21,16 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.github.rixwwd.vaccination_scheduler.admin.validator.Confirmation;
 
 @Entity
 @Table(name = "ADMIN_USERS")
-@EntityListeners({ AuditingEntityListener.class, PasswordEncodeListener.class })
-@Confirmation(field = "plainPassword", confirmationField = "passwordConfirmation")
-public class AdminUser implements PasswordEncodable {
+@EntityListeners(AuditingEntityListener.class)
+@Confirmation(field = "plainPassword", confirmationField = "passwordConfirmation", groups = { AdminUser.Create.class,
+		AdminUser.Update.class })
+public class AdminUser {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -46,12 +48,12 @@ public class AdminUser implements PasswordEncodable {
 
 	@Transient
 	@NotBlank(groups = Create.class)
-	@Size(min = 8)
+	@Size(min = 8, groups = { Create.class, Update.class })
 	private String plainPassword;
 
 	@Transient
 	@NotBlank(groups = Create.class)
-	@Size(min = 8)
+	@Size(min = 8, groups = { Create.class, Update.class })
 	private String passwordConfirmation;
 
 	@Column(name = "ENABLED")
@@ -155,7 +157,20 @@ public class AdminUser implements PasswordEncodable {
 		this.updatedAt = updatedAt;
 	}
 
+	public boolean changePassword(PasswordEncoder encoder) {
+
+		if (plainPassword != null && !plainPassword.isBlank() && plainPassword.equals(passwordConfirmation)) {
+			password = encoder.encode(plainPassword);
+			return true;
+		}
+
+		return false;
+	}
+
 	public static interface Create {
+	}
+
+	public static interface Update {
 	}
 
 	@Override
