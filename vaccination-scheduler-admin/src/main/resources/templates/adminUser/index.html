@@ -9,7 +9,7 @@
 <body>
 <div th:fragment="content" class="container-md">
 	<h1>ユーザー</h1>
-	
+
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <a href="#" th:href="@{/adminUser/new}" class="btn btn-primary">追加</a>
 	</div>
@@ -28,7 +28,7 @@
 			<tr th:each="adminUser : ${adminUsers}">
 				<td th:text="${adminUser.name}">管理者</td>
 				<td th:text="${adminUser.username}">admin</td>
-				<td th:text="${adminUser.enabled ? '有効' : '無効'}">有効</td>
+				<td>[[${adminUser.enabled ? '有効' : '無効'}]]<th:block th:if="${adminUser.locked}" th:text="'(ロック中)'"></th:block></i></td>
 				<td th:text="${adminUser.role.roleName}">システム管理者</td>
 				<td>
 					<a href="#" th:href="@{/adminUser/{id}(id=${adminUser.id})}">詳細</a>

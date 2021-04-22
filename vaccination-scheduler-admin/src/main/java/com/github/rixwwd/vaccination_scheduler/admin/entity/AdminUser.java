@@ -1,5 +1,6 @@
 package com.github.rixwwd.vaccination_scheduler.admin.entity;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -31,6 +32,10 @@ import com.github.rixwwd.vaccination_scheduler.admin.validator.Confirmation;
 @Confirmation(field = "plainPassword", confirmationField = "passwordConfirmation", groups = { AdminUser.Create.class,
 		AdminUser.Update.class })
 public class AdminUser {
+
+	private static final int LOCK_COUNT = 5;
+
+	private static final Duration UNLOCK_TIME = Duration.ofHours(24);
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -68,6 +73,12 @@ public class AdminUser {
 	@NotBlank
 	@Column(name = "NAME")
 	private String name;
+
+	@Column(name = "FAILED_LOGIN_COUNT")
+	private int failedLoginCount;
+
+	@Column(name = "LAST_FAILED_LOGIN")
+	private LocalDateTime lastFailedLogin;
 
 	@CreatedDate
 	@Column(name = "CREATED_AT")
@@ -141,6 +152,22 @@ public class AdminUser {
 		this.name = name;
 	}
 
+	public int getFailedLoginCount() {
+		return failedLoginCount;
+	}
+
+	public void setFailedLoginCount(int failedLoginCount) {
+		this.failedLoginCount = failedLoginCount;
+	}
+
+	public LocalDateTime getLastFailedLogin() {
+		return lastFailedLogin;
+	}
+
+	public void setLastFailedLogin(LocalDateTime lastFailedLogin) {
+		this.lastFailedLogin = lastFailedLogin;
+	}
+
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
@@ -165,6 +192,24 @@ public class AdminUser {
 		}
 
 		return false;
+	}
+
+	public void loginfailed() {
+		failedLoginCount++;
+		lastFailedLogin = LocalDateTime.now();
+	}
+
+	public void resetFailedLoginCount() {
+		failedLoginCount = 0;
+		lastFailedLogin = null;
+	}
+
+	public boolean isLocked() {
+
+		final boolean overFailCount = failedLoginCount >= LOCK_COUNT;
+		final boolean inLockTime = lastFailedLogin != null
+				&& LocalDateTime.now().isBefore(lastFailedLogin.plus(UNLOCK_TIME));
+		return overFailCount && inLockTime;
 	}
 
 	public static interface Create {
