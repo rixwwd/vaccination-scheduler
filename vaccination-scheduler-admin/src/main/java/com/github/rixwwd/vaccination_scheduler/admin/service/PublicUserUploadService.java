@@ -8,6 +8,7 @@ import javax.validation.groups.Default;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
@@ -26,13 +27,17 @@ public class PublicUserUploadService {
 
 	private static final Logger logger = LoggerFactory.getLogger(PublicUserUploadService.class);
 
-	private PublicUserRepository publicUserRepository;
+	private final PublicUserRepository publicUserRepository;
 
-	private SmartValidator smartValidator;
+	private final SmartValidator smartValidator;
 
-	public PublicUserUploadService(PublicUserRepository publicUserRepository, SmartValidator smartValidator) {
+	private final PasswordEncoder encoder;
+
+	public PublicUserUploadService(PublicUserRepository publicUserRepository, SmartValidator smartValidator,
+			PasswordEncoder encoder) {
 		this.publicUserRepository = publicUserRepository;
 		this.smartValidator = smartValidator;
+		this.encoder = encoder;
 	}
 
 	@Transactional(rollbackFor = BindException.class)
@@ -68,6 +73,8 @@ public class PublicUserUploadService {
 					}
 					throw new BindException(result);
 				}
+
+				publicUser.setPassword(encoder.encode(publicUser.getPlainPassword()));
 
 				publicUserRepository.save(publicUser);
 				lineNumber++;

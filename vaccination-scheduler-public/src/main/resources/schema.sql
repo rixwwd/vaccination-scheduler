@@ -150,3 +150,8 @@ create table action_log (
 
 create index action_log_public_user_id on action_log(public_user_id);
 
+-- V2021041901__add_role_on_admin_users.sql
+alter table admin_users add column role varchar;
+update admin_users set role = 'ADMIN';
+alter table admin_users alter column role set not null;
+

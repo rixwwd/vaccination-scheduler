@@ -26,15 +26,19 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.github.rixwwd.vaccination_scheduler.admin.validator.Confirmation;
 
 @Entity
 @Table(name = "PUBLIC_USERS")
-@EntityListeners({ AuditingEntityListener.class, PasswordEncodeListener.class })
-public class PublicUser implements PasswordEncodable {
+@EntityListeners(AuditingEntityListener.class)
+@Confirmation(field = "plainPassword", confirmationField = "plainPasswordConfirmation", groups = {
+		PublicUser.Create.class, PublicUser.UpdatePassword.class })
+public class PublicUser {
 
 	@Id
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -265,6 +269,16 @@ public class PublicUser implements PasswordEncodable {
 				.findFirst();
 	}
 
+	public boolean changePassword(PasswordEncoder encoder) {
+
+		if (plainPassword != null && !plainPassword.isBlank() && plainPassword.equals(plainPasswordConfirmation)) {
+			password = encoder.encode(plainPassword);
+			return true;
+		}
+
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -272,34 +286,10 @@ public class PublicUser implements PasswordEncodable {
 		builder.append(id);
 		builder.append(", loginName=");
 		builder.append(loginName);
-		builder.append(", password=");
-		builder.append(password);
-		builder.append(", plainPassword=");
-		builder.append(plainPassword);
-		builder.append(", plainPasswordConfirmation=");
-		builder.append(plainPasswordConfirmation);
 		builder.append(", name=");
 		builder.append(name);
 		builder.append(", hurigana=");
 		builder.append(hurigana);
-		builder.append(", birthday=");
-		builder.append(birthday);
-		builder.append(", address=");
-		builder.append(address);
-		builder.append(", telephoneNumber=");
-		builder.append(telephoneNumber);
-		builder.append(", email=");
-		builder.append(email);
-		builder.append(", sms=");
-		builder.append(sms);
-		builder.append(", coupons=");
-		builder.append(coupons);
-		builder.append(", reservations=");
-		builder.append(reservations);
-		builder.append(", waitingList=");
-		builder.append(waitingList);
-		builder.append(", vaccinationHistories=");
-		builder.append(vaccinationHistories);
 		builder.append(", createdAt=");
 		builder.append(createdAt);
 		builder.append(", updatedAt=");
