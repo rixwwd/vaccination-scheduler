@@ -155,3 +155,9 @@ alter table admin_users add column role varchar;
 update admin_users set role = 'ADMIN';
 alter table admin_users alter column role set not null;
 
+-- V2021042101__add_failed_login_count_on_admin_users.sql
+alter table admin_users add column failed_login_count integer not null default 0;
+
+-- V2021042102__add_last_failed_login_on_admin_users.sql
+alter table admin_users add column last_failed_login timestamp;
+
