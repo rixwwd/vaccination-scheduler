@@ -89,6 +89,7 @@ public class VaccineStockController {
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			var modelAndView = new ModelAndView("vaccineStock/edit");
+			vaccineStock.setId(id);
 			modelAndView.addObject("vaccineStock", vaccineStock);
 			return modelAndView;
 		}

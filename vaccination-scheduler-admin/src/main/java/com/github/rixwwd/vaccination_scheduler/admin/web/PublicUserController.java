@@ -106,6 +106,7 @@ public class PublicUserController {
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			var modelAndView = new ModelAndView("publicUser/edit");
+			publicUser.setId(id);
 			modelAndView.addObject("publicUser", publicUser);
 			return modelAndView;
 		}

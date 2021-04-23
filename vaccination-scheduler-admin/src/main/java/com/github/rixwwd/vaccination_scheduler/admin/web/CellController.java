@@ -87,6 +87,7 @@ public class CellController {
 	public ModelAndView update(@PathVariable UUID id, @Validated Cell cell, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			var modelAndView = new ModelAndView("cell/edit");
+			cell.setId(id);
 			modelAndView.addObject("cell", cell);
 			return modelAndView;
 		}
