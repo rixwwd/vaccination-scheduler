@@ -81,6 +81,7 @@ public class RoomController {
 	public ModelAndView update(@PathVariable UUID id, @Validated Room room, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			var modelAndView = new ModelAndView("room/edit");
+			room.setId(id);
 			modelAndView.addObject("room", room);
 			return modelAndView;
 		}
